@@ -1,0 +1,368 @@
+"use client";
+
+import { useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { SHOPS, SERVICES } from "@/lib/mockData";
+import { ClayButton } from "@/components/ui/clay-button";
+import { ClayInput } from "@/components/ui/clay-input";
+import { ClayCard } from "@/components/ui/clay-card";
+
+type Step = 1 | 2 | 3 | 4 | 5;
+
+interface SelectedService {
+  id: string;
+  name: string;
+  price: number;
+  selected: boolean;
+}
+
+interface BookingFormState {
+  step: Step;
+  selectedShopId: string | null;
+  selectedServices: SelectedService[];
+  selectedDate: string;
+  selectedTime: string;
+  vehicle: { make: string; model: string; year: string; plateNumber: string };
+  customer: { name: string; email: string; password: string };
+}
+
+export default function BookingWizard() {
+  const [form, setForm] = useState<BookingFormState>({
+    step: 1,
+    selectedShopId: null,
+    selectedServices: SERVICES.map(s => ({ id: s.id, name: s.name, price: s.basePrice, selected: false })),
+    selectedDate: "", selectedTime: "",
+    vehicle: { make: "", model: "", year: "", plateNumber: "" },
+    customer: { name: "", email: "", password: "" },
+  });
+
+  const nextStep = () => setForm(prev => ({ ...prev, step: (prev.step + 1) as Step }));
+  const prevStep = () => setForm(prev => ({ ...prev, step: (prev.step - 1) as Step }));
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        <div className="clay-card p-8 mb-8">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Book Your Service</h2>
+              <p className="text-slate-500">Simple, transparent booking in 5 steps</p>
+            </div>
+            <div className="text-right hidden sm:block">
+              <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Step {form.step} of 5</div>
+              <div className="text-lg font-bold text-slate-900">{getStepTitle(form.step)}</div>
+            </div>
+          </div>
+          <div className="relative h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div className="h-full bg-electric-blue rounded-full transition-all duration-500" style={{ width: `${(form.step / 5) * 100}%` }} />
+          </div>
+          <div className="flex justify-between mt-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
+            {["Select Shop","Select Services","Date & Time","Vehicle & Account","Confirmation"].map((label, i) => (
+              <span key={label} className={i + 1 === form.step ? "text-electric-blue font-bold" : "text-slate-400"}>{label}</span>
+            ))}
+          </div>
+        </div>
+        <div className="clay-card p-8 min-h-[600px]">{stepContent(form, setForm, nextStep, prevStep)}</div>
+        {form.step !== 5 && (
+          <div className="mt-8 flex justify-between items-center">
+            {form.step > 1 && <ClayButton variant="ghost" onClick={prevStep} className="px-6"><ArrowLeft className="h-4 w-4 mr-2" /> Back</ClayButton>}
+            <ClayButton variant="primary" onClick={nextStep} disabled={!getStepValid(form)} className="px-8">Continue <ArrowRight className="ml-2 h-4 w-4" /></ClayButton>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function getStepTitle(step: Step) {
+  const titles: Record<Step, string> = { 1: "Select Shop", 2: "Select Services", 3: "Date & Time", 4: "Vehicle & Account", 5: "Confirmation" };
+  return titles[step];
+}
+
+function getStepValid(f: BookingFormState) {
+  switch (f.step) {
+    case 1: return !!f.selectedShopId;
+    case 2: return f.selectedServices.some(s => s.selected);
+    case 3: return !!f.selectedDate && !!f.selectedTime;
+    case 4: return Boolean(f.vehicle.make && f.vehicle.model && f.vehicle.year && f.vehicle.plateNumber && f.customer.name && f.customer.email && f.customer.password);
+    default: return true;
+  }
+}
+
+function isStep4Valid(f: BookingFormState) {
+  return Boolean(
+    f.vehicle.make &&
+    f.vehicle.model &&
+    f.vehicle.year &&
+    f.vehicle.plateNumber &&
+    f.customer.name &&
+    f.customer.email &&
+    f.customer.password
+  );
+}
+
+type FormUpdater = React.Dispatch<React.SetStateAction<BookingFormState>>;
+
+function stepContent(
+  form: BookingFormState,
+  setForm: FormUpdater,
+  nextStep: () => void,
+  prevStep: () => void
+) {
+  switch (form.step) {
+    case 1: return <Step1Content form={form} setForm={setForm} nextStep={nextStep} />;
+    case 2: return <Step2Content form={form} setForm={setForm} nextStep={nextStep} prevStep={prevStep} />;
+    case 3: return <Step3Content form={form} setForm={setForm} nextStep={nextStep} prevStep={prevStep} />;
+    case 4: return <Step4Content form={form} setForm={setForm} nextStep={nextStep} prevStep={prevStep} />;
+    case 5: return <Step5Content form={form} setForm={setForm} />;
+  }
+}
+
+function Step1Content({
+  form,
+  setForm,
+  nextStep,
+}: {
+  form: BookingFormState;
+  setForm: FormUpdater;
+  nextStep: () => void;
+}) {
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {SHOPS.map((shop) => {
+          const isSelected = form.selectedShopId === shop.id;
+          return (
+            <button
+              key={shop.id}
+              onClick={() => setForm(prev => ({ ...prev, selectedShopId: shop.id }))}
+              className={`clay-card p-6 cursor-pointer transition-all duration-200 flex flex-col items-center text-center ${isSelected ? "ring-2 ring-electric-blue bg-electric-blue/5" : "hover:bg-slate-100"}`}
+            >
+              <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center mb-4 text-slate-600">
+                <span className="text-xl">🏪</span>
+              </div>
+              <h4 className="font-bold text-slate-900 mb-1">{shop.name}</h4>
+              <p className="text-sm text-slate-500 mb-2">{shop.city}</p>
+              <div className="flex items-center gap-1 text-xs">
+                <span className="text-yellow-500">★</span>
+                <span>{shop.rating}</span>
+              </div>
+              {shop.isOpen ? (
+                <span className="mt-2 text-xs text-emerald-600 font-medium">Open now</span>
+              ) : (
+                <span className="mt-2 text-xs text-rose-600 font-medium">Closed</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+      <div className="mt-8 flex justify-end">
+        <ClayButton variant="primary" onClick={nextStep} disabled={!form.selectedShopId} className="px-8">
+          Continue <ArrowRight className="ml-2 h-4 w-4" />
+        </ClayButton>
+      </div>
+    </div>
+  );
+}
+
+function Step2Content({
+  form,
+  setForm,
+  nextStep,
+  prevStep,
+}: {
+  form: BookingFormState;
+  setForm: FormUpdater;
+  nextStep: () => void;
+  prevStep: () => void;
+}) {
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {SERVICES.map((service) => {
+          const isSelected = form.selectedServices.find(s => s.id === service.id)?.selected || false;
+          return (
+            <label key={service.id} className="cursor-pointer" onClick={() => setForm(prev => ({
+              ...prev,
+              selectedServices: prev.selectedServices.map(s => s.id === service.id ? { ...s, selected: !s.selected } : s),
+            }))}>
+              <ClayCard padding="md" className={`transition-all duration-200 ${isSelected ? "ring-2 ring-electric-blue bg-electric-blue/5" : "hover:bg-slate-100"}`}>
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-bold text-slate-900">{service.name}</h4>
+                  <span className="text-sm font-medium text-electric-blue">${service.basePrice}</span>
+                </div>
+                <p className="text-sm text-slate-500 mb-4">{service.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">{service.duration} min</span>
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    className="h-5 w-5 text-electric-blue rounded border-slate-300"
+                  />
+                </div>
+              </ClayCard>
+            </label>
+          );
+        })}
+      </div>
+      <div className="mt-8 flex justify-between items-center">
+        <ClayButton variant="ghost" onClick={prevStep} className="px-6">
+          <ArrowLeft className="h-4 w-4 mr-2" /> Back
+        </ClayButton>
+        <ClayButton variant="primary" onClick={nextStep} disabled={!form.selectedServices.some(s => s.selected)} className="px-8">
+          Continue <ArrowRight className="ml-2 h-4 w-4" />
+        </ClayButton>
+      </div>
+    </div>
+  );
+}
+
+function Step3Content({
+  form,
+  setForm,
+  nextStep,
+  prevStep,
+}: {
+  form: BookingFormState;
+  setForm: FormUpdater;
+  nextStep: () => void;
+  prevStep: () => void;
+}) {
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-4">
+          <div className="relative">
+            <input
+              type="date"
+              className="clay-input w-full pl-10 pr-4 py-2.5"
+              value={form.selectedDate}
+              onChange={(e) => setForm(prev => ({ ...prev, selectedDate: e.target.value }))}
+              min="2026-10-21"
+            />
+          </div>
+          <p className="text-sm text-slate-500">Select your preferred service date</p>
+        </div>
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold text-slate-700 mb-3">Available Time Slots</h4>
+          <div className="grid grid-cols-5 gap-3">
+            {["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"].map((slot) => {
+              const isSelected = form.selectedTime === slot;
+              return (
+                <button
+                  key={slot}
+                  onClick={() => setForm(prev => ({ ...prev, selectedTime: slot }))}
+                  className={`h-12 rounded-xl flex items-center justify-center font-medium transition-all ${isSelected ? "bg-electric-blue text-white shadow-[4px_4px_8px_#1d4ed8]" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
+                >
+                  {slot}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="mt-8 flex justify-between items-center">
+        <ClayButton variant="ghost" onClick={prevStep} className="px-6">
+          <ArrowLeft className="h-4 w-4 mr-2" /> Back
+        </ClayButton>
+        <ClayButton variant="primary" onClick={nextStep} disabled={!form.selectedDate || !form.selectedTime} className="px-8">
+          Continue <ArrowRight className="ml-2 h-4 w-4" />
+        </ClayButton>
+      </div>
+    </div>
+  );
+}
+
+function Step4Content({
+  form,
+  setForm,
+  nextStep,
+  prevStep,
+}: {
+  form: BookingFormState;
+  setForm: FormUpdater;
+  nextStep: () => void;
+  prevStep: () => void;
+}) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold text-slate-900 mb-2">Vehicle Details</h3>
+        <div className="space-y-3">
+          <ClayInput label="Make" value={form.vehicle.make} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, make: e.target.value } }))} />
+          <ClayInput label="Model" value={form.vehicle.model} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, model: e.target.value } }))} />
+          <ClayInput label="Year" type="number" value={form.vehicle.year} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, year: e.target.value } }))} />
+          <ClayInput label="License Plate" value={form.vehicle.plateNumber} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, plateNumber: e.target.value } }))} />
+        </div>
+      </div>
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold text-slate-900 mb-2">Account Details</h3>
+        <div className="space-y-3">
+          <ClayInput label="Full Name" value={form.customer.name} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, name: e.target.value } }))} />
+          <ClayInput label="Email" type="email" value={form.customer.email} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, email: e.target.value } }))} />
+          <ClayInput label="Password" type="password" value={form.customer.password} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, password: e.target.value } }))} />
+        </div>
+      </div>
+      <div className="mt-8 flex justify-between items-center">
+        <ClayButton variant="ghost" onClick={prevStep} className="px-6">
+          <ArrowLeft className="h-4 w-4 mr-2" /> Back
+        </ClayButton>
+        <ClayButton variant="primary" onClick={nextStep} disabled={!isStep4Valid(form)} className="px-8">
+          Continue <ArrowRight className="ml-2 h-4 w-4" />
+        </ClayButton>
+      </div>
+    </div>
+  );
+}
+
+function Step5Content({
+  form,
+  setForm,
+}: {
+  form: BookingFormState;
+  setForm: FormUpdater;
+}) {
+  const selectedShop = SHOPS.find(s => s.id === form.selectedShopId);
+  const totalPrice = form.selectedServices
+    .filter(s => s.selected)
+    .reduce((acc, s) => acc + s.price, 0);
+
+  return (
+    <div className="text-center py-10">
+      <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[4px_4px_8px_#047857]">
+        <span className="text-2xl">✓</span>
+      </div>
+      <h2 className="text-3xl font-bold text-slate-900 mb-2">Booking Confirmed!</h2>
+      <p className="text-slate-500 mb-8">
+        Your appointment has been scheduled. We&apos;ll send a confirmation email to {form.customer.email}.
+      </p>
+      <div className="clay-card p-8 mb-8">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h4 className="font-bold text-slate-900">{selectedShop?.name}</h4>
+            <p className="text-sm text-slate-500">{selectedShop?.address}</p>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-slate-400">Vehicle</div>
+            <div className="font-medium text-slate-900">{form.vehicle.year} {form.vehicle.make} {form.vehicle.model}</div>
+          </div>
+        </div>
+        <div className="space-y-3 mb-6">
+          {form.selectedServices.filter(s => s.selected).map((svc) => (
+            <div key={svc.id} className="flex justify-between items-center text-sm">
+              <span className="text-slate-600">{svc.name}</span>
+              <span className="font-medium text-slate-900">${svc.price}</span>
+            </div>
+          ))}
+          <div className="border-t pt-3 flex justify-between items-center text-lg font-bold text-slate-900">
+            <span>Total</span>
+            <span>${totalPrice}</span>
+          </div>
+        </div>
+      </div>
+      <button onClick={() => setForm(prev => ({ ...prev, step: 1 as Step }))} className="clay-btn w-full py-3 bg-electric-blue text-white rounded-xl font-semibold shadow-[4px_4px_8px_#1d4ed8]">
+        Book Another
+      </button>
+    </div>
+  );
+}

@@ -1,0 +1,17 @@
+▲ Next.js 16.4.2 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.100.26:3000
+✓ Ready in 3.7s
+✓ Running next.config.ts took 106ms
+- Cache Components enabled
+- Partial Prefetching enabled
+
+○ Compiling / ...
+ GET / 200 in 1901ms (next.js: 1210ms, application-code: 691ms)
+ GET /dashboard 200 in 245ms (next.js: 14ms, application-code: 231ms)
+ GET /book 200 in 128ms (next.js: 15ms, application-code: 113ms)
+ GET /sa 200 in 326ms (next.js: 26ms, application-code: 300ms)
+ GET /technician 200 in 132ms (next.js: 17ms, application-code: 115ms)
+ GET /parts 200 in 351ms (next.js: 20ms, application-code: 331ms)
+ GET /qc 200 in 139ms (next.js: 17ms, application-code: 122ms)
+ GET /owner 200 in 175ms (next.js: 16ms, application-code: 159ms)

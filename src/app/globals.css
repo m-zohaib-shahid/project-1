@@ -1,26 +1,82 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-clay-shadow-outer: #b8b9be;
+  --color-clay-shadow-inner: #ffffff;
+  --color-electric-blue: #2563eb;
+  --color-amber-accent: #d97706;
+  --color-emerald-accent: #059669;
+  --color-rose-accent: #e11d48;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a;
+    --foreground: #f8fafc;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* Claymorphism utilities */
+.clay-shadow {
+  box-shadow: 8px 8px 16px #b8b9be, -8px -8px 16px #ffffff;
+}
+
+.clay-shadow-inset {
+  box-shadow: inset 4px 4px 8px #b8b9be, inset -4px -4px 8px #ffffff;
+}
+
+.clay-card {
+  background: #f1f5f9;
+  border-radius: 1.5rem;
+  box-shadow: 8px 8px 16px #b8b9be, -8px -8px 16px #ffffff;
+  border: none;
+}
+
+.clay-card-pressed {
+  box-shadow: inset 6px 6px 12px #b8b9be, inset -6px -6px 12px #ffffff;
+}
+
+.clay-btn {
+  background: #f1f5f9;
+  border-radius: 1rem;
+  box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.clay-btn:active {
+  box-shadow: inset 4px 4px 8px #b8b9be, inset -4px -4px 8px #ffffff;
+  transform: translateY(2px);
+}
+
+.clay-input {
+  background: #f1f5f9;
+  border-radius: 1rem;
+  box-shadow: inset 4px 4px 8px #b8b9be, inset -4px -4px 8px #ffffff;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.clay-input:focus {
+  box-shadow: inset 4px 4px 8px #b8b9be, inset -4px -4px 8px #ffffff, 0 0 0 3px #2563eb;
+  outline: none;
+}
+
+.clay-badge {
+  background: #f1f5f9;
+  border-radius: 9999px;
+  box-shadow: 4px 4px 8px #b8b9be, -4px -4px 8px #ffffff;
+  border: none;
 }

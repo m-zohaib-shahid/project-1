@@ -1,0 +1,3 @@
+⚠ Warning: Next.js ignored package-lock.json in D:\hack because it is outside the current Git repository (D:\hack\bayflow).
+ To use this directory, set `turbopack.root` in your Next.js config.
+
