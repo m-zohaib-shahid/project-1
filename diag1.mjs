@@ -1,0 +1,18 @@
+﻿const res = await fetch("http://127.0.0.1:9333/json/list");
+const t = (await res.json()).find(x=>x.type==="page");
+const ws = new WebSocket(t.webSocketDebuggerUrl);
+await new Promise(r=>ws.addEventListener("open",r,{once:true}));
+let id=0; const pending=new Map();
+ws.addEventListener("message",e=>{const m=JSON.parse(e.data); if(m.id&&pending.has(m.id)){pending.get(m.id)(m.result);pending.delete(m.id);}});
+const send=(method,params={})=>{const i=++id;return new Promise(r=>{pending.set(i,r);ws.send(JSON.stringify({id:i,method,params}));});};
+const ev=async x=>{const r=await send("Runtime.evaluate",{expression:x,returnByValue:true,awaitPromise:true});return r.result?.value;};
+await send("Page.enable");
+await send("Page.navigate",{url:"http://localhost:3111/"});
+await new Promise(r=>setTimeout(r,3000));
+console.log("ROOT imgs:", await ev(`JSON.stringify([...document.querySelectorAll("img")].map(i=>({src:(i.currentSrc||i.src).slice(0,90), alt:i.alt, cls:i.className.slice(0,40)})))`));
+console.log("ROOT links:", await ev(`JSON.stringify([...document.querySelectorAll("a")].map(a=>({t:a.textContent.trim().slice(0,30),h:a.getAttribute("href")})))`));
+await send("Page.navigate",{url:"http://localhost:3111/sa"});
+await new Promise(r=>setTimeout(r,3000));
+console.log("SA nav:", await ev(`JSON.stringify([...document.querySelectorAll("aside nav a")].map(a=>({t:a.textContent.trim(),h:a.getAttribute("href"),cls:a.className})))`));
+console.log("SA path:", await ev(`location.pathname`));
+process.exit(0);

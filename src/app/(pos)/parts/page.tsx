@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Package, Plus, ArrowRight } from "lucide-react";
-import { INVENTORY, JOB_CARDS, getVehicleById } from "@/lib/mockData";
+import { useMemo, useState } from "react";
+import { Package, Plus, ArrowRight, CheckCircle2, Search } from "lucide-react";
+import { INVENTORY, JOB_CARDS, getVehicleById, type InventoryItem } from "@/lib/mockData";
 import { formatCurrency } from "@/lib/utils";
 import { ClayButton } from "@/components/ui/clay-button";
 import { ClayBadge } from "@/components/ui/clay-badge";
@@ -12,8 +12,63 @@ import { ClayModal } from "@/components/ui/clay-modal";
 
 export default function PartsDashboard() {
   const [poModalOpen, setPOModalOpen] = useState(false);
+  const [inventory, setInventory] = useState<InventoryItem[]>(INVENTORY);
+  const [search, setSearch] = useState("");
+  const [poForm, setPoForm] = useState({ supplier: "", expectedDelivery: "" });
+  const [poErrors, setPoErrors] = useState<{ supplier?: string; expectedDelivery?: string }>({});
+  const [poTouched, setPoTouched] = useState(false);
+  const [poSent, setPoSent] = useState<string | null>(null);
+  const [allocatedJobs, setAllocatedJobs] = useState<string[]>([]);
+  const [detailItem, setDetailItem] = useState<InventoryItem | null>(null);
 
-  const lowStockItems = INVENTORY.filter(i => i.quantity <= i.reorderLevel);
+  const lowStockItems = useMemo(
+    () => inventory.filter(i => i.quantity <= i.reorderLevel),
+    [inventory]
+  );
+
+  const filteredInventory = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return inventory;
+    return inventory.filter(
+      (i) =>
+        i.name.toLowerCase().includes(q) ||
+        i.sku.toLowerCase().includes(q) ||
+        i.category.toLowerCase().includes(q) ||
+        i.location.toLowerCase().includes(q)
+    );
+  }, [inventory, search]);
+
+  const jobsAwaitingParts = JOB_CARDS.filter(
+    (j) => j.status === "WAITING_PARTS" && !allocatedJobs.includes(j.id)
+  );
+
+  const closePOModal = () => {
+    setPOModalOpen(false);
+    setPoForm({ supplier: "", expectedDelivery: "" });
+    setPoErrors({});
+    setPoTouched(false);
+  };
+
+  const handleSendPO = () => {
+    const errors: { supplier?: string; expectedDelivery?: string } = {};
+    if (!poForm.supplier.trim()) errors.supplier = "Supplier name is required";
+    if (!poForm.expectedDelivery) errors.expectedDelivery = "Expected delivery date is required";
+    setPoErrors(errors);
+    setPoTouched(true);
+    if (Object.keys(errors).length > 0) return;
+
+    setPoSent(
+      `Purchase order sent to ${poForm.supplier.trim()} for ${lowStockItems.length} low-stock item(s).`
+    );
+    closePOModal();
+  };
+
+  const allocateParts = (jobId: string, needed: string[]) => {
+    setInventory(prev =>
+      prev.map((item) => (needed.includes(item.name) ? { ...item, quantity: item.quantity + 1 } : item))
+    );
+    setAllocatedJobs(prev => [...prev, jobId]);
+  };
 
   return (
     <div className="space-y-8">
@@ -29,11 +84,24 @@ export default function PartsDashboard() {
         </div>
       </div>
 
+      {poSent && (
+        <div
+          role="status"
+          className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800"
+        >
+          <CheckCircle2 className="h-5 w-5 shrink-0" />
+          <span className="text-sm font-medium">{poSent}</span>
+          <button type="button" onClick={() => setPoSent(null)} className="ml-auto text-xs font-semibold underline">
+            Dismiss
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total SKUs" value={INVENTORY.length} color="text-blue-600" />
+        <StatCard label="Total SKUs" value={inventory.length} color="text-blue-600" />
         <StatCard label="Low Stock" value={lowStockItems.length} color="text-amber-600" />
-        <StatCard label="Out of Stock" value={INVENTORY.filter(i => i.quantity === 0).length} color="text-rose-600" />
-        <StatCard label="Total Value" value={INVENTORY.reduce((acc, i) => acc + i.quantity * i.unitCost, 0).toFixed(2)} color="text-emerald-600" />
+        <StatCard label="Out of Stock" value={inventory.filter(i => i.quantity === 0).length} color="text-rose-600" />
+        <StatCard label="Total Value" value={formatCurrency(inventory.reduce((acc, i) => acc + i.quantity * i.unitCost, 0))} color="text-emerald-600" />
       </div>
 
       <div className="clay-card overflow-hidden">
@@ -42,11 +110,32 @@ export default function PartsDashboard() {
             <Package className="h-4 w-4 text-slate-500" />
             <span className="text-sm font-medium text-slate-700">Inventory Stock</span>
           </div>
-          <div className="flex gap-2">
-            <ClayInput placeholder="Search SKU or part name..." className="w-64" />
+          <div className="flex gap-2 w-full md:w-auto">
+            <div className="relative flex-1 md:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+              <ClayInput
+                placeholder="Search SKU or part name..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9 w-full"
+                aria-label="Search inventory"
+              />
+            </div>
           </div>
         </div>
 
+        {filteredInventory.length === 0 ? (
+          <div className="p-12 text-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="h-6 w-6 text-slate-400" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900">No parts found</h3>
+            <p className="text-slate-500 text-sm">No inventory items match &ldquo;{search.trim()}&rdquo;.</p>
+            <ClayButton variant="ghost" size="sm" onClick={() => setSearch("")} className="mt-4 px-4 py-2">
+              Clear search
+            </ClayButton>
+          </div>
+        ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left divide-y divide-slate-200">
             <thead>
@@ -63,7 +152,7 @@ export default function PartsDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
-              {INVENTORY.map((item) => {
+              {filteredInventory.map((item) => {
                 const isLowStock = item.quantity <= item.reorderLevel;
                 const isOutOfStock = item.quantity === 0;
                 return (
@@ -84,9 +173,15 @@ export default function PartsDashboard() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <ClayButton variant="ghost" size="sm" className="p-2">
-                          <ArrowRight className="h-4 w-4" />
-                        </ClayButton>
+                          <ClayButton
+                            variant="ghost"
+                            size="sm"
+                            className="p-2"
+                            onClick={() => setDetailItem(item)}
+                            aria-label={`View details for ${item.name}`}
+                          >
+                            <ArrowRight className="h-4 w-4" />
+                          </ClayButton>
                       </div>
                     </td>
                   </tr>
@@ -95,14 +190,28 @@ export default function PartsDashboard() {
             </tbody>
           </table>
         </div>
+        )}
       </div>
 
       <div className="clay-card overflow-hidden">
         <div className="p-6 border-b border-slate-200">
           <h2 className="text-lg font-bold text-slate-900">Jobs Awaiting Parts</h2>
         </div>
+        {jobsAwaitingParts.length === 0 ? (
+          <div className="p-12 text-center">
+            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="h-7 w-7 text-emerald-600" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900">No jobs waiting on parts</h3>
+            <p className="text-slate-500 text-sm">
+              {allocatedJobs.length > 0
+                ? "All pending part requests have been allocated."
+                : "Every job card has all the parts it needs."}
+            </p>
+          </div>
+        ) : (
         <div className="divide-y divide-slate-200">
-          {JOB_CARDS.filter(j => j.status === "WAITING_PARTS").map((job) => {
+          {jobsAwaitingParts.map((job) => {
             const vehicle = getVehicleById(job.vehicle.id);
             return (
               <div key={job.id} className="p-6 flex justify-between items-start hover:bg-slate-50 transition-colors">
@@ -120,30 +229,57 @@ export default function PartsDashboard() {
                     <span>Parts needed: {job.partsNeeded.length}</span>
                     <ClayBadge variant="warning" className="text-xs">Shortage</ClayBadge>
                   </div>
+                  {job.partsNeeded.length > 0 && (
+                    <ul className="mt-2 flex flex-wrap gap-2">
+                      {job.partsNeeded.map((part) => (
+                        <li key={part} className="text-xs px-2 py-1 rounded-lg bg-slate-100 text-slate-600">
+                          {part}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <div className="flex items-center gap-2">
-                  <ClayButton variant="primary" size="sm" className="px-3 py-2">
+                <div className="flex items-center gap-2 shrink-0">
+                  <ClayButton
+                    variant="primary"
+                    size="sm"
+                    className="px-3 py-2"
+                    onClick={() => allocateParts(job.id, job.partsNeeded)}
+                  >
                     Allocate Parts
-                  </ClayButton>
-                  <ClayButton variant="ghost" size="sm" className="px-3 py-2 text-slate-500">
-                    <ArrowRight className="h-4 w-4" />
                   </ClayButton>
                 </div>
               </div>
             );
           })}
         </div>
+        )}
       </div>
 
-      <ClayModal isOpen={poModalOpen} onClose={() => setPOModalOpen(false)} title="Create Purchase Order">
+      <ClayModal isOpen={poModalOpen} onClose={closePOModal} title="Create Purchase Order">
         <div className="space-y-4">
           <p className="text-sm text-slate-600">Create a purchase order to restock low inventory items:</p>
           <div className="space-y-3">
-            <ClayInput label="Supplier" placeholder="Enter supplier name..." />
-            <ClayInput label="Expected Delivery" type="date" />
+            <ClayInput
+              label="Supplier"
+              placeholder="Enter supplier name..."
+              value={poForm.supplier}
+              onChange={(e) => setPoForm(prev => ({ ...prev, supplier: e.target.value }))}
+              error={poTouched ? poErrors.supplier : undefined}
+            />
+            <ClayInput
+              label="Expected Delivery"
+              type="date"
+              value={poForm.expectedDelivery}
+              onChange={(e) => setPoForm(prev => ({ ...prev, expectedDelivery: e.target.value }))}
+              error={poTouched ? poErrors.expectedDelivery : undefined}
+            />
           </div>
           <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
             <h4 className="text-sm font-bold text-slate-900 mb-3">Suggested Items to Order</h4>
+            {lowStockItems.length === 0 ? (
+              <p className="text-sm text-slate-500">No items are below their reorder level right now.</p>
+            ) : (
             <div className="space-y-2">
               {lowStockItems.map((item) => (
                 <div key={item.id} className="flex items-center justify-between p-2 bg-white rounded border border-slate-200">
@@ -157,16 +293,49 @@ export default function PartsDashboard() {
                 </div>
               ))}
             </div>
+            )}
           </div>
           <div className="flex gap-3 pt-4">
-            <ClayButton variant="primary" size="sm" className="flex-1 px-4 py-2">
+            <ClayButton variant="primary" size="sm" className="flex-1 px-4 py-2" onClick={handleSendPO}>
               Send PO
             </ClayButton>
-            <ClayButton variant="ghost" size="sm" onClick={() => setPOModalOpen(false)} className="flex-1 px-4 py-2">
+            <ClayButton variant="ghost" size="sm" onClick={closePOModal} className="flex-1 px-4 py-2">
               Cancel
             </ClayButton>
           </div>
         </div>
+      </ClayModal>
+
+      <ClayModal isOpen={!!detailItem} onClose={() => setDetailItem(null)} title="Part Details">
+        {detailItem && (
+          <div className="space-y-4">
+            <div>
+              <div className="font-bold text-slate-900">{detailItem.name}</div>
+              <div className="text-sm text-slate-500">SKU {detailItem.sku} • {detailItem.category}</div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-3 rounded-xl bg-slate-50">
+                <div className="text-xs text-slate-500">Quantity</div>
+                <div className="text-lg font-bold text-slate-900">{detailItem.quantity}</div>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50">
+                <div className="text-xs text-slate-500">Reorder Level</div>
+                <div className="text-lg font-bold text-slate-900">{detailItem.reorderLevel}</div>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50">
+                <div className="text-xs text-slate-500">Unit Cost</div>
+                <div className="text-lg font-bold text-slate-900">{formatCurrency(detailItem.unitCost)}</div>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50">
+                <div className="text-xs text-slate-500">Location</div>
+                <div className="text-lg font-bold text-slate-900">{detailItem.location}</div>
+              </div>
+            </div>
+            <ClayButton variant="ghost" size="sm" onClick={() => setDetailItem(null)} className="w-full px-4 py-2">
+              Close
+            </ClayButton>
+          </div>
+        )}
       </ClayModal>
     </div>
   );

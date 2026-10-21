@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-clay-shadow-outer: #b8b9be;
@@ -13,70 +15,107 @@
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
+  --clay-surface: #f1f5f9;
+  --clay-shadow-dark: #b8b9be;
+  --clay-shadow-light: #ffffff;
+  --clay-shadow-dark-inset: #cbd5e1;
+  --clay-shadow-light-inset: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f8fafc;
-  }
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --clay-surface: #1e293b;
+  --clay-shadow-dark: #0f172a;
+  --clay-shadow-light: #334155;
+  --clay-shadow-dark-inset: #0f172a;
+  --clay-shadow-light-inset: #334155;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Claymorphism utilities */
-.clay-shadow {
-  box-shadow: 8px 8px 16px #b8b9be, -8px -8px 16px #ffffff;
-}
+/* Claymorphism utilities.
+   IMPORTANT: these must live inside @layer components. Unlayered CSS always
+   wins over Tailwind utilities, which previously broke every variant colour
+   (bg-electric-blue, bg-slate-900, ...) on cards, buttons and badges. */
+@layer components {
+  .clay-shadow {
+    box-shadow: 8px 8px 16px var(--clay-shadow-dark), -8px -8px 16px var(--clay-shadow-light);
+  }
 
-.clay-shadow-inset {
-  box-shadow: inset 4px 4px 8px #b8b9be, inset -4px -4px 8px #ffffff;
-}
+  .clay-shadow-sm {
+    box-shadow: 4px 4px 8px var(--clay-shadow-dark), -4px -4px 8px var(--clay-shadow-light);
+  }
 
-.clay-card {
-  background: #f1f5f9;
-  border-radius: 1.5rem;
-  box-shadow: 8px 8px 16px #b8b9be, -8px -8px 16px #ffffff;
-  border: none;
-}
+  .clay-shadow-inset {
+    box-shadow: inset 4px 4px 8px var(--clay-shadow-dark-inset), inset -4px -4px 8px var(--clay-shadow-light-inset);
+  }
 
-.clay-card-pressed {
-  box-shadow: inset 6px 6px 12px #b8b9be, inset -6px -6px 12px #ffffff;
-}
+  .clay-card {
+    background: var(--clay-surface);
+    border-radius: 1.5rem;
+    box-shadow: 8px 8px 16px var(--clay-shadow-dark), -8px -8px 16px var(--clay-shadow-light);
+    border: none;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
 
-.clay-btn {
-  background: #f1f5f9;
-  border-radius: 1rem;
-  box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
-  border: none;
-  transition: all 0.2s ease;
-}
+  .clay-card-pressed {
+    box-shadow: inset 6px 6px 12px var(--clay-shadow-dark-inset), inset -6px -6px 12px var(--clay-shadow-light-inset);
+  }
 
-.clay-btn:active {
-  box-shadow: inset 4px 4px 8px #b8b9be, inset -4px -4px 8px #ffffff;
-  transform: translateY(2px);
-}
+  .clay-btn {
+    background: var(--clay-surface);
+    border-radius: 1rem;
+    box-shadow: 6px 6px 12px var(--clay-shadow-dark), -6px -6px 12px var(--clay-shadow-light);
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  }
 
-.clay-input {
-  background: #f1f5f9;
-  border-radius: 1rem;
-  box-shadow: inset 4px 4px 8px #b8b9be, inset -4px -4px 8px #ffffff;
-  border: none;
-  transition: all 0.2s ease;
-}
+  .clay-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
 
-.clay-input:focus {
-  box-shadow: inset 4px 4px 8px #b8b9be, inset -4px -4px 8px #ffffff, 0 0 0 3px #2563eb;
-  outline: none;
-}
+  .clay-btn:active:not(:disabled) {
+    box-shadow: inset 4px 4px 8px var(--clay-shadow-dark-inset), inset -4px -4px 8px var(--clay-shadow-light-inset);
+    transform: translateY(2px);
+  }
 
-.clay-badge {
-  background: #f1f5f9;
-  border-radius: 9999px;
-  box-shadow: 4px 4px 8px #b8b9be, -4px -4px 8px #ffffff;
-  border: none;
+  .clay-btn:focus-visible {
+    /* Use outline (not box-shadow) so variant shadow utilities cannot override it. */
+    outline: 3px solid rgba(37, 99, 235, 0.55);
+    outline-offset: 2px;
+  }
+
+  .clay-input {
+    background: var(--clay-surface);
+    border-radius: 1rem;
+    box-shadow: inset 4px 4px 8px var(--clay-shadow-dark-inset), inset -4px -4px 8px var(--clay-shadow-light-inset);
+    border: none;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .clay-input:focus {
+    box-shadow:
+      inset 4px 4px 8px var(--clay-shadow-dark-inset),
+      inset -4px -4px 8px var(--clay-shadow-light-inset),
+      0 0 0 3px rgba(37, 99, 235, 0.45);
+    outline: none;
+  }
+
+  .clay-input::placeholder {
+    color: #94a3b8;
+  }
+
+  .clay-badge {
+    background: var(--clay-surface);
+    border-radius: 9999px;
+    box-shadow: 4px 4px 8px var(--clay-shadow-dark), -4px -4px 8px var(--clay-shadow-light);
+    border: none;
+  }
 }

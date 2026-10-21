@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Clock, Wrench, Bell, ChevronRight, Truck, CheckCircle2, Phone } from "lucide-react";
 import { BOOKINGS, ESTIMATES, STATUS_LABELS } from "@/lib/mockData";
-import { getVehicleById, getServicesByIds } from "@/lib/mockData";
+import { getVehicleById, getServicesByIds, getShopById } from "@/lib/mockData";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { ClayButton } from "@/components/ui/clay-button";
 import { ClayBadge, bookingStatusVariant } from "@/components/ui/clay-badge";
@@ -11,12 +11,22 @@ import { ClayCard } from "@/components/ui/clay-card";
 import { EstimateCard } from "@/components/customer/estimate-card";
 import { StatusTimeline } from "@/components/customer/status-timeline";
 import { ClayAvatar } from "@/components/ui/clay-avatar";
+import { ClayModal } from "@/components/ui/clay-modal";
 
 export default function CustomerDashboard() {
   const [activeTab, setActiveTab] = useState("active");
+  const [estimateStatus, setEstimateStatus] = useState<Record<string, "PENDING" | "ACCEPTED" | "REJECTED">>(() =>
+    Object.fromEntries(ESTIMATES.map((e) => [e.id, e.status]))
+  );
+  const [estimateNotice, setEstimateNotice] = useState<string | null>(null);
+  const [detailBookingId, setDetailBookingId] = useState<string | null>(null);
   const bookings = BOOKINGS.filter(b => b.customerId === "cust-1");
   const activeBookings = bookings.filter(b => b.status !== "COMPLETED" && b.status !== "CANCELLED");
-  const pendingEstimate = ESTIMATES.find(e => e.status === "PENDING");
+  const pendingEstimate = ESTIMATES.find(e => estimateStatus[e.id] === "PENDING");
+  const detailBooking = bookings.find(b => b.id === detailBookingId) ?? null;
+  const detailVehicle = detailBooking ? getVehicleById(detailBooking.vehicleId) : null;
+  const detailServices = detailBooking ? getServicesByIds(detailBooking.serviceIds) : [];
+  const primaryShop = getShopById(bookings[0]?.shopId ?? "shop-1");
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -27,7 +37,16 @@ export default function CustomerDashboard() {
             <p className="text-slate-500">Here&apos;s what&apos;s happening with your vehicles</p>
           </div>
           <div className="mt-4 md:mt-0 flex items-center gap-3">
-            <ClayButton variant="ghost" size="sm" className="px-3 py-2">
+            <ClayButton
+              variant="ghost"
+              size="sm"
+              className="px-3 py-2"
+              onClick={() => {
+                if (!primaryShop) return;
+                window.location.assign(`tel:${primaryShop.phone.replace(/[^\d+]/g, "")}`);
+              }}
+              aria-label={`Call ${primaryShop?.name ?? "shop"}`}
+            >
               <Phone className="h-4 w-4" /> Call Shop
             </ClayButton>
             <ClayAvatar name="Alex Rivera" size="lg" />
@@ -109,11 +128,34 @@ export default function CustomerDashboard() {
           </ClayCard>
         </div>
 
+        {estimateNotice && (
+          <div
+            role="status"
+            className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 mb-8"
+          >
+            <CheckCircle2 className="h-5 w-5 shrink-0" />
+            <span className="text-sm font-medium">{estimateNotice}</span>
+            <button type="button" onClick={() => setEstimateNotice(null)} className="ml-auto text-xs font-semibold underline">
+              Dismiss
+            </button>
+          </div>
+        )}
+
         {pendingEstimate && (
           <div className="mb-8">
             <h2 className="text-xl font-bold text-slate-900 mb-6">Pending Estimate</h2>
             <ClayCard padding="lg">
-              <EstimateCard estimate={pendingEstimate} />
+              <EstimateCard
+                estimate={{ ...pendingEstimate, status: estimateStatus[pendingEstimate.id] }}
+                onAccept={() => {
+                  setEstimateStatus(prev => ({ ...prev, [pendingEstimate.id]: "ACCEPTED" }));
+                  setEstimateNotice(`Estimate #${pendingEstimate.id.slice(-4)} accepted. Your shop has been notified.`);
+                }}
+                onReject={() => {
+                  setEstimateStatus(prev => ({ ...prev, [pendingEstimate.id]: "REJECTED" }));
+                  setEstimateNotice(`Estimate #${pendingEstimate.id.slice(-4)} rejected. Your shop has been notified.`);
+                }}
+              />
             </ClayCard>
           </div>
         )}
@@ -157,7 +199,11 @@ export default function CustomerDashboard() {
                       {booking.totalAmount && (
                         <div className="text-lg font-bold text-slate-900">{formatCurrency(booking.totalAmount)}</div>
                       )}
-                      <button className="mt-2 text-sm text-electric-blue font-medium hover:underline">
+                      <button
+                        type="button"
+                        onClick={() => setDetailBookingId(booking.id)}
+                        className="mt-2 text-sm text-electric-blue font-medium hover:underline inline-flex items-center"
+                      >
                         View Details <ChevronRight className="h-3 w-3 ml-1" />
                       </button>
                     </div>
@@ -172,6 +218,62 @@ export default function CustomerDashboard() {
             </div>
           </div>
         </div>
+
+        <ClayModal
+          isOpen={!!detailBooking}
+          onClose={() => setDetailBookingId(null)}
+          title={detailBooking ? `Booking #${detailBooking.id.slice(-3)}` : "Booking"}
+        >
+          {detailBooking && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="font-bold text-slate-900">
+                    {detailVehicle ? `${detailVehicle.make} ${detailVehicle.model}` : "Vehicle"}
+                  </div>
+                  <div className="text-sm text-slate-500">{detailVehicle?.plateNumber}</div>
+                </div>
+                <ClayBadge variant={bookingStatusVariant(detailBooking.status)} className="text-xs">
+                  {STATUS_LABELS[detailBooking.status].label}
+                </ClayBadge>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 text-sm text-slate-600">
+                <span className="font-medium text-slate-900">Scheduled:</span>{" "}
+                {formatDateTime(detailBooking.scheduledAt)}
+              </div>
+
+              <div>
+                <div className="text-sm font-semibold text-slate-900 mb-2">Services</div>
+                {detailServices.length === 0 ? (
+                  <p className="text-sm text-slate-500">No services on this booking.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {detailServices.map((s) => (
+                      <li key={s.id} className="text-sm text-slate-600 flex justify-between gap-4">
+                        <span>{s.name}</span>
+                        <span className="text-slate-500">{formatCurrency(s.basePrice)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {detailBooking.notes && (
+                <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-900">
+                  <span className="font-semibold">Notes:</span> {detailBooking.notes}
+                </div>
+              )}
+
+              {detailBooking.totalAmount && (
+                <div className="flex justify-between border-t pt-3 text-lg font-bold text-slate-900">
+                  <span>Total</span>
+                  <span>{formatCurrency(detailBooking.totalAmount)}</span>
+                </div>
+              )}
+            </div>
+          )}
+        </ClayModal>
       </div>
     </div>
   );

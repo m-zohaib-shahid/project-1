@@ -44,7 +44,13 @@ export function ShopCard({ shop }: ShopCardProps) {
         </div>
         <div className="flex items-center gap-2 text-sm text-slate-600 mb-3">
           <Phone className="h-4 w-4" />
-          <span>{shop.phone}</span>
+          <a
+            href={`tel:${shop.phone.replace(/[^\d+]/g, "")}`}
+            className="hover:text-electric-blue hover:underline"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {shop.phone}
+          </a>
         </div>
         <div className="flex gap-2 mb-4">
           {shop.services.slice(0, 3).map((service) => (
@@ -54,7 +60,7 @@ export function ShopCard({ shop }: ShopCardProps) {
           ))}
         </div>
         <Link
-          href="/book"
+          href={`/book?shop=${encodeURIComponent(shop.id)}`}
           className="block w-full py-2.5 bg-electric-blue text-white rounded-xl font-semibold shadow-[4px_4px_8px_#1d4ed8] hover:shadow-[6px_6px_12px_#1d4ed8] transition-all active:translate-y-[2px] active:shadow-[inset_4px_4px_8px_#1d4ed8] text-center"
         >
           Book Now

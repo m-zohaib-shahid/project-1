@@ -1,0 +1,18 @@
+﻿
+D:\hack\bayflow\tests\harness.mjs
+  37:9  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+D:\hack\bayflow\tests\run.mjs
+  1:46  warning  'CDP_PORT' is defined but never used       @typescript-eslint/no-unused-vars
+  1:56  warning  'BASE' is defined but never used           @typescript-eslint/no-unused-vars
+  6:5   warning  'pass' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  7:5   warning  'fail' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\hack\bayflow\tests\t1-routes.mjs
+  1:10  warning  'Session' is defined but never used      @typescript-eslint/no-unused-vars
+  1:19  warning  'sleep' is defined but never used        @typescript-eslint/no-unused-vars
+  1:33  warning  'httpGetJson' is defined but never used  @typescript-eslint/no-unused-vars
+  1:46  warning  'CDP_PORT' is defined but never used     @typescript-eslint/no-unused-vars
+
+Γ£û 9 problems (0 errors, 9 warnings)
+

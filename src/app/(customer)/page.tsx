@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Search, ChevronRight } from "lucide-react";
 import { SHOPS, SERVICES } from "@/lib/mockData";
 import { ClayButton } from "@/components/ui/clay-button";
@@ -11,16 +11,26 @@ import { ShopCard } from "@/components/customer/shop-card";
 export default function LandingPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [cityFilter, setCityFilter] = useState("all");
+  const [showAllServices, setShowAllServices] = useState(false);
+  const listingsRef = useRef<HTMLDivElement>(null);
 
   const cities = ["all", "Austin", "Dallas", "Houston"];
-  const featuredServices = SERVICES.slice(0, 4);
+  const featuredServices = showAllServices ? SERVICES : SERVICES.slice(0, 4);
 
   const filteredShops = SHOPS.filter((shop) => {
-    const matchesSearch = shop.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shop.services.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()));
+    const query = searchQuery.trim().toLowerCase();
+    const matchesSearch =
+      !query ||
+      shop.name.toLowerCase().includes(query) ||
+      shop.city.toLowerCase().includes(query) ||
+      shop.services.some((s) => s.toLowerCase().includes(query));
     const matchesCity = cityFilter === "all" || shop.city === cityFilter;
     return matchesSearch && matchesCity;
   });
+
+  const scrollToListings = () => {
+    listingsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -65,7 +75,7 @@ export default function LandingPage() {
                   ))}
                 </select>
               </div>
-              <ClayButton variant="primary" size="lg" className="w-full sm:w-auto">
+              <ClayButton variant="primary" size="lg" className="w-full sm:w-auto" onClick={scrollToListings}>
                 Find a Shop <ChevronRight className="ml-2 h-4 w-4" />
               </ClayButton>
             </div>
@@ -81,9 +91,13 @@ export default function LandingPage() {
               <h2 className="text-2xl font-bold text-slate-900">Popular Services</h2>
               <p className="text-slate-500">Everything your vehicle needs</p>
             </div>
-            <a href="#" className="text-sm font-medium text-electric-blue hover:underline">
-              View all services
-            </a>
+            <button
+              type="button"
+              onClick={() => setShowAllServices((prev) => !prev)}
+              className="text-sm font-medium text-electric-blue hover:underline"
+            >
+              {showAllServices ? "Show fewer services" : "View all services"}
+            </button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {featuredServices.map((service) => (
@@ -104,16 +118,24 @@ export default function LandingPage() {
       </div>
 
       {/* Shop Listings */}
-      <div className="py-16">
+      <div className="py-16" ref={listingsRef}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center mb-10">
             <div>
               <h2 className="text-2xl font-bold text-slate-900">Top Repair Shops</h2>
               <p className="text-slate-500">Find a trusted shop near you</p>
             </div>
-            <a href="#" className="text-sm font-medium text-electric-blue hover:underline">
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery("");
+                setCityFilter("all");
+                scrollToListings();
+              }}
+              className="text-sm font-medium text-electric-blue hover:underline"
+            >
               See all {SHOPS.length} shops
-            </a>
+            </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredShops.map((shop) => (

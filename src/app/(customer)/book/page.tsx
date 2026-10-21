@@ -1,11 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SHOPS, SERVICES } from "@/lib/mockData";
 import { ClayButton } from "@/components/ui/clay-button";
 import { ClayInput } from "@/components/ui/clay-input";
 import { ClayCard } from "@/components/ui/clay-card";
+
+/**
+ * Reads `location.search` as an external store so the value can be used
+ * during render (no state-update-in-effect). The server snapshot is an empty
+ * string, which keeps SSR and hydration consistent.
+ */
+function subscribeToUrl(onStoreChange: () => void) {
+  window.addEventListener("popstate", onStoreChange);
+  window.addEventListener("hashchange", onStoreChange);
+  return () => {
+    window.removeEventListener("popstate", onStoreChange);
+    window.removeEventListener("hashchange", onStoreChange);
+  };
+}
+
+function getUrlSearch() {
+  return window.location.search;
+}
+
+function getServerUrlSearch() {
+  return "";
+}
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -27,14 +49,30 @@ interface BookingFormState {
 }
 
 export default function BookingWizard() {
-  const [form, setForm] = useState<BookingFormState>({
+  // The `?shop=` query param pre-selects a shop (e.g. from a shop card).
+  // Reading it as an external store keeps it derived from render — no effect.
+  const search = useSyncExternalStore(subscribeToUrl, getUrlSearch, getServerUrlSearch);
+  const preselectedShopId = useMemo(() => {
+    const shopId = new URLSearchParams(search).get("shop");
+    return shopId && SHOPS.some((s) => s.id === shopId) ? shopId : null;
+  }, [search]);
+
+  const [form, setForm] = useState<BookingFormState>(() => ({
     step: 1,
     selectedShopId: null,
     selectedServices: SERVICES.map(s => ({ id: s.id, name: s.name, price: s.basePrice, selected: false })),
     selectedDate: "", selectedTime: "",
     vehicle: { make: "", model: "", year: "", plateNumber: "" },
     customer: { name: "", email: "", password: "" },
-  });
+  }));
+
+  // A shop chosen by the user always wins; otherwise fall back to the `?shop=`
+  // query param so links from a shop card land on the right selection.
+  const effectiveShopId = form.selectedShopId ?? preselectedShopId;
+  const effectiveForm: BookingFormState = useMemo(
+    () => ({ ...form, selectedShopId: effectiveShopId }),
+    [form, effectiveShopId]
+  );
 
   const nextStep = () => setForm(prev => ({ ...prev, step: (prev.step + 1) as Step }));
   const prevStep = () => setForm(prev => ({ ...prev, step: (prev.step - 1) as Step }));
@@ -62,13 +100,7 @@ export default function BookingWizard() {
             ))}
           </div>
         </div>
-        <div className="clay-card p-8 min-h-[600px]">{stepContent(form, setForm, nextStep, prevStep)}</div>
-        {form.step !== 5 && (
-          <div className="mt-8 flex justify-between items-center">
-            {form.step > 1 && <ClayButton variant="ghost" onClick={prevStep} className="px-6"><ArrowLeft className="h-4 w-4 mr-2" /> Back</ClayButton>}
-            <ClayButton variant="primary" onClick={nextStep} disabled={!getStepValid(form)} className="px-8">Continue <ArrowRight className="ml-2 h-4 w-4" /></ClayButton>
-          </div>
-        )}
+        <div className="clay-card p-6 sm:p-8 min-h-[600px]">{stepContent(effectiveForm, setForm, nextStep, prevStep)}</div>
       </div>
     </div>
   );
@@ -79,26 +111,30 @@ function getStepTitle(step: Step) {
   return titles[step];
 }
 
-function getStepValid(f: BookingFormState) {
-  switch (f.step) {
-    case 1: return !!f.selectedShopId;
-    case 2: return f.selectedServices.some(s => s.selected);
-    case 3: return !!f.selectedDate && !!f.selectedTime;
-    case 4: return Boolean(f.vehicle.make && f.vehicle.model && f.vehicle.year && f.vehicle.plateNumber && f.customer.name && f.customer.email && f.customer.password);
-    default: return true;
-  }
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function isValidEmail(email: string) {
+  return EMAIL_RE.test(email.trim());
 }
 
-function isStep4Valid(f: BookingFormState) {
-  return Boolean(
-    f.vehicle.make &&
-    f.vehicle.model &&
-    f.vehicle.year &&
-    f.vehicle.plateNumber &&
-    f.customer.name &&
-    f.customer.email &&
-    f.customer.password
-  );
+function isValidYear(year: string) {
+  const n = Number(year);
+  const currentYear = new Date().getFullYear();
+  return Number.isInteger(n) && n >= 1900 && n <= currentYear + 1;
+}
+
+type FormErrors = Partial<Record<"vehicleMake" | "vehicleModel" | "vehicleYear" | "plateNumber" | "name" | "email" | "password", string>>;
+
+function validateStep4(f: BookingFormState): FormErrors {
+  const errors: FormErrors = {};
+  if (!f.vehicle.make.trim()) errors.vehicleMake = "Make is required";
+  if (!f.vehicle.model.trim()) errors.vehicleModel = "Model is required";
+  if (!isValidYear(f.vehicle.year)) errors.vehicleYear = "Enter a valid year (1900 - " + (new Date().getFullYear() + 1) + ")";
+  if (!f.vehicle.plateNumber.trim()) errors.plateNumber = "License plate is required";
+  if (!f.customer.name.trim()) errors.name = "Name is required";
+  if (!isValidEmail(f.customer.email)) errors.email = "Enter a valid email address";
+  if (f.customer.password.length < 8) errors.password = "Password must be at least 8 characters";
+  return errors;
 }
 
 type FormUpdater = React.Dispatch<React.SetStateAction<BookingFormState>>;
@@ -182,10 +218,10 @@ function Step2Content({
         {SERVICES.map((service) => {
           const isSelected = form.selectedServices.find(s => s.id === service.id)?.selected || false;
           return (
-            <label key={service.id} className="cursor-pointer" onClick={() => setForm(prev => ({
-              ...prev,
-              selectedServices: prev.selectedServices.map(s => s.id === service.id ? { ...s, selected: !s.selected } : s),
-            }))}>
+            <label
+              key={service.id}
+              className="cursor-pointer"
+            >
               <ClayCard padding="md" className={`transition-all duration-200 ${isSelected ? "ring-2 ring-electric-blue bg-electric-blue/5" : "hover:bg-slate-100"}`}>
                 <div className="flex items-center justify-between mb-4">
                   <h4 className="font-bold text-slate-900">{service.name}</h4>
@@ -197,7 +233,11 @@ function Step2Content({
                   <input
                     type="checkbox"
                     checked={isSelected}
-                    className="h-5 w-5 text-electric-blue rounded border-slate-300"
+                    onChange={() => setForm(prev => ({
+                      ...prev,
+                      selectedServices: prev.selectedServices.map(s => s.id === service.id ? { ...s, selected: !s.selected } : s),
+                    }))}
+                    className="h-5 w-5 text-electric-blue rounded border-slate-300 cursor-pointer"
                   />
                 </div>
               </ClayCard>
@@ -284,30 +324,42 @@ function Step4Content({
   nextStep: () => void;
   prevStep: () => void;
 }) {
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState(false);
+
+  const handleSubmitStep4 = () => {
+    const nextErrors = validateStep4(form);
+    setErrors(nextErrors);
+    setTouched(true);
+    if (Object.keys(nextErrors).length === 0) {
+      nextStep();
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-slate-900 mb-2">Vehicle Details</h3>
         <div className="space-y-3">
-          <ClayInput label="Make" value={form.vehicle.make} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, make: e.target.value } }))} />
-          <ClayInput label="Model" value={form.vehicle.model} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, model: e.target.value } }))} />
-          <ClayInput label="Year" type="number" value={form.vehicle.year} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, year: e.target.value } }))} />
-          <ClayInput label="License Plate" value={form.vehicle.plateNumber} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, plateNumber: e.target.value } }))} />
+          <ClayInput label="Make" value={form.vehicle.make} error={touched ? errors.vehicleMake : undefined} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, make: e.target.value } }))} />
+          <ClayInput label="Model" value={form.vehicle.model} error={touched ? errors.vehicleModel : undefined} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, model: e.target.value } }))} />
+          <ClayInput label="Year" type="number" value={form.vehicle.year} error={touched ? errors.vehicleYear : undefined} helperText="e.g. 2020" onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, year: e.target.value } }))} />
+          <ClayInput label="License Plate" value={form.vehicle.plateNumber} error={touched ? errors.plateNumber : undefined} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, plateNumber: e.target.value } }))} />
         </div>
       </div>
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-slate-900 mb-2">Account Details</h3>
         <div className="space-y-3">
-          <ClayInput label="Full Name" value={form.customer.name} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, name: e.target.value } }))} />
-          <ClayInput label="Email" type="email" value={form.customer.email} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, email: e.target.value } }))} />
-          <ClayInput label="Password" type="password" value={form.customer.password} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, password: e.target.value } }))} />
+          <ClayInput label="Full Name" value={form.customer.name} error={touched ? errors.name : undefined} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, name: e.target.value } }))} />
+          <ClayInput label="Email" type="email" value={form.customer.email} error={touched ? errors.email : undefined} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, email: e.target.value } }))} />
+          <ClayInput label="Password" type="password" value={form.customer.password} error={touched ? errors.password : undefined} helperText="At least 8 characters" onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, password: e.target.value } }))} />
         </div>
       </div>
       <div className="mt-8 flex justify-between items-center">
         <ClayButton variant="ghost" onClick={prevStep} className="px-6">
           <ArrowLeft className="h-4 w-4 mr-2" /> Back
         </ClayButton>
-        <ClayButton variant="primary" onClick={nextStep} disabled={!isStep4Valid(form)} className="px-8">
+        <ClayButton variant="primary" onClick={handleSubmitStep4} className="px-8">
           Continue <ArrowRight className="ml-2 h-4 w-4" />
         </ClayButton>
       </div>
