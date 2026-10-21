@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Search, ChevronRight } from "lucide-react";
+import { Search, ChevronRight, Star, BookOpen } from "lucide-react";
 import { SHOPS, SERVICES } from "@/lib/mockData";
 import { ClayButton } from "@/components/ui/clay-button";
 import { ClayInput } from "@/components/ui/clay-input";
