@@ -53,6 +53,57 @@ export default function LandingPage() {
               Find the best auto repair shops near you. Book services, track repairs in real-time,
               and manage estimates — all from one app.
             </p>
+            <div className="mt-4 text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-700 text-sm font-medium mb-4">
+                <Star className="h-3 w-3 fill-yellow-400 text-yellow-500" />
+                Trusted by 5,000+ car owners across Texas
+              </div>
+            </div>
+            <div className="flex gap-2 sm:gap-4 justify-center">
+              <ClayButton
+                variant="primary"
+                size="lg"
+                className="px-8 py-3 font-semibold transition-all hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4)]"
+                onClick={(e) => {
+                  e.preventDefault();
+                  // Smooth scroll effect before navigation
+                  setTimeout(() => {
+                    window.location.href = "/book";
+                  }, 150);
+                }}
+              >
+                <a href="/book" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
+                  <BookOpen className="h-5 w-5" /> Find Shops Near You
+                </a>
+              </ClayButton>
+            </div>
+            <div className="flex gap-1 sm:gap-2" role="tablist" aria-label="City filter">
+              {cities.map((city) => (
+                <button
+                  key={city}
+                  role="tab"
+                  aria-selected={city === cityFilter}
+                  onClick={() => setCityFilter(city)}
+                  className={`
+                    inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                      city === "all"
+                        ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        : `bg-electric-blue text-white hover:bg-slate-200 dark:hover:bg-slate-700`
+                        }
+                      ${cityFilter === city && "ring-2 ring-electric-blue/50"}
+                    }
+                  >
+                    {city === "all" ? "All Cities" : city}
+                  </button>
+                </button>
+              ))}
+            </div>
+            <div className="mt-8 text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-700 text-sm font-medium mb-4">
+                <Star className="h-3 w-3 fill-yellow-400 text-yellow-500" />
+                Trusted by 5,000+ car owners across Texas
+              </div>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
@@ -64,12 +115,39 @@ export default function LandingPage() {
                 />
               </div>
               <div className="flex-1 max-w-md">
-                <select
+                <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <ClayInput
+                  placeholder="Search shops, services, or cities..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <div className="flex gap-1 sm:gap-2" role="tablist" aria-label="City filter">
                   className="clay-input w-full px-4 py-2.5 text-slate-900 cursor-pointer"
                   value={cityFilter}
-                  onChange={(e) => setCityFilter(e.target.value)}
-                >
-                  <option value="all">All Cities</option>
+                  
+                  <div className="flex gap-1 sm:gap-2" role="tablist" aria-label="City filter">
+                {cities.map((city) => (
+                  <button
+                    key={city}
+                    role="tab"
+                    aria-selected={city === cityFilter}
+                    onClick={() => setCityFilter(city)}
+                    className={`
+                      inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                        city === "all"
+                          ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          : `bg-electric-blue text-white hover:bg-slate-200 dark:hover:bg-slate-700`
+                        }
+                        ${cityFilter === city && "ring-2 ring-electric-blue/50"}
+                      }
+                    >
+                      {city === "all" ? "All Cities" : city}
+                    </button>
+                  </button>
+                ))}</option>
                   {cities.slice(1).map((c) => (
                     <option key={c} value={c}>{c}</option>
                   ))}
