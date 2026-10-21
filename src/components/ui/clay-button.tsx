@@ -12,12 +12,18 @@ export interface ClayButtonProps
 }
 
 const variantStyles: Record<string, string> = {
-  primary: "bg-electric-blue text-white shadow-[4px_4px_8px_#1d4ed8]",
-  secondary: "bg-slate-300 text-slate-900 shadow-[4px_4px_8px_#cbd5e1]",
-  success: "bg-emerald-accent text-white shadow-[4px_4px_8px_#047857]",
-  warning: "bg-amber-accent text-white shadow-[4px_4px_8px_#b45309]",
-  danger: "bg-rose-accent text-white shadow-[4px_4px_8px_#dc2626]",
-  ghost: "bg-transparent text-slate-600 shadow-none hover:bg-slate-200",
+  // Default primary: solid clay button with tactile depth
+  primary: "bg-electric-blue text-white shadow-clay-button hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4)] transition-shadow",
+  // Secondary: subtle clay button
+  secondary: "bg-slate-100 text-slate-900 shadow-clay-sm hover:bg-slate-100 transition-shadow",
+  // Success: positive action
+  success: "bg-emerald-accent text-white shadow-clay-button hover:shadow-[6px_6px_12px_rgba(5,150,105,0.4)] transition-shadow",
+  // Warning: attention action
+  warning: "bg-amber-accent text-white shadow-clay-button hover:shadow-[6px_6px_12px_rgba(181,85,9,0.4)] transition-shadow",
+  // Danger: destructive action
+  danger: "bg-rose-accent text-white shadow-clay-button hover:shadow-[6px_6px_12px_rgba(220,38,38,0.4)] transition-shadow",
+  // Ghost: transparent with subtle shadow on hover
+  ghost: "bg-transparent text-slate-600 shadow-none hover:bg-slate-200 hover:shadow-clay-sm transition-shadow",
 };
 
 const sizeStyles: Record<string, string> = {

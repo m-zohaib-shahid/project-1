@@ -24,21 +24,21 @@ export interface ClayBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variantStyles: Record<ClayBadgeVariant, string> = {
-  default: "bg-slate-200 text-slate-700 shadow-[2px_2px_4px_#b8b9be]",
-  primary: "bg-electric-blue text-white shadow-[2px_2px_4px_#1d4ed8]",
-  success: "bg-emerald-accent text-white shadow-[2px_2px_4px_#047857]",
-  warning: "bg-amber-accent text-white shadow-[2px_2px_4px_#b45309]",
-  danger: "bg-rose-accent text-white shadow-[2px_2px_4px_#dc2626]",
-  info: "bg-slate-600 text-white shadow-[2px_2px_4px_#475569]",
-  pending: "bg-amber-100 text-amber-800 shadow-[2px_2px_4px_#d97706]",
-  confirmed: "bg-blue-100 text-blue-800 shadow-[2px_2px_4px_#2563eb]",
-  in_progress: "bg-blue-100 text-blue-800 shadow-[2px_2px_4px_#2563eb]",
-  waiting_parts: "bg-amber-100 text-amber-800 shadow-[2px_2px_4px_#d97706]",
-  qc: "bg-purple-100 text-purple-800 shadow-[2px_2px_4px_#7c3aed]",
-  ready_for_pickup: "bg-emerald-100 text-emerald-800 shadow-[2px_2px_4px_#059669]",
-  completed: "bg-emerald-100 text-emerald-800 shadow-[2px_2px_4px_#059669]",
-  cancelled: "bg-rose-100 text-rose-800 shadow-[2px_2px_4px_#e11d48]",
-  rejected: "bg-rose-100 text-rose-800 shadow-[2px_2px_4px_#e11d48]",
+  default: "bg-slate-200 text-slate-700 shadow-clay-badge",
+  primary: "bg-electric-blue text-white shadow-clay-badge",
+  success: "bg-emerald-accent text-white shadow-clay-badge",
+  warning: "bg-amber-accent text-white shadow-clay-badge",
+  danger: "bg-rose-accent text-white shadow-clay-badge",
+  info: "bg-slate-600 text-white shadow-clay-badge",
+  pending: "bg-amber-100 text-amber-800 shadow-clay-badge",
+  confirmed: "bg-blue-100 text-blue-800 shadow-clay-badge",
+  in_progress: "bg-blue-100 text-blue-800 shadow-clay-badge",
+  waiting_parts: "bg-amber-100 text-amber-800 shadow-clay-badge",
+  qc: "bg-purple-100 text-purple-800 shadow-clay-badge",
+  ready_for_pickup: "bg-emerald-100 text-emerald-800 shadow-clay-badge",
+  completed: "bg-emerald-100 text-emerald-800 shadow-clay-badge",
+  cancelled: "bg-rose-100 text-rose-800 shadow-clay-badge",
+  rejected: "bg-rose-100 text-rose-800 shadow-clay-badge",
 };
 
 const statusVariants: Record<string, ClayBadgeVariant> = {

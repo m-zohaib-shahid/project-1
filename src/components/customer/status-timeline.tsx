@@ -104,7 +104,7 @@ export function StatusTimeline({ currentStatus, steps }: StatusTimelineProps) {
                   isCompletedStep
                     ? "bg-electric-blue text-white shadow-[4px_4px_8px_#1d4ed8]"
                     : isPending
-                    ? "bg-slate-200 text-slate-400"
+                    ? "bg-slate-200 text-slate-400 shadow-clay-sm"
                     : "bg-white text-electric-blue border-2 border-electric-blue shadow-sm"
                 }`}>
                   {isCompletedStep ? (

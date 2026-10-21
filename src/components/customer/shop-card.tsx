@@ -13,7 +13,7 @@ export interface ShopCardProps {
 
 export function ShopCard({ shop }: ShopCardProps) {
   return (
-    <ClayCard className="group hover:shadow-[12px_12px_24px_#b8b9be,-12px_-12px_24px_#ffffff] transition-shadow duration-300 cursor-pointer">
+    <ClayCard className="group hover:shadow-clay-card transition-shadow duration-300 cursor-pointer">
       <div className="relative h-48 overflow-hidden rounded-2xl">
         <Image
           src={shop.image}
@@ -61,7 +61,7 @@ export function ShopCard({ shop }: ShopCardProps) {
         </div>
         <Link
           href={`/book?shop=${encodeURIComponent(shop.id)}`}
-          className="block w-full py-2.5 bg-electric-blue text-white rounded-xl font-semibold shadow-[4px_4px_8px_#1d4ed8] hover:shadow-[6px_6px_12px_#1d4ed8] transition-all active:translate-y-[2px] active:shadow-[inset_4px_4px_8px_#1d4ed8] text-center"
+          className="block w-full py-2.5 bg-electric-blue text-white rounded-xl font-semibold shadow-clay-button hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4)] transition-all active:translate-y-[2px] active:shadow-[inset_4px_4px_8px_rgba(163,177,198,0.2)] text-center"
         >
           Book Now
         </Link>

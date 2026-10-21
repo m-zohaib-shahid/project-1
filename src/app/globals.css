@@ -4,7 +4,7 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --color-clay-shadow-outer: #b8b9be;
+  --color-clay-shadow-outer: #a3b1c6;
   --color-clay-shadow-inner: #ffffff;
   --color-electric-blue: #2563eb;
   --color-amber-accent: #d97706;
@@ -16,9 +16,9 @@
   --background: #f8fafc;
   --foreground: #0f172a;
   --clay-surface: #f1f5f9;
-  --clay-shadow-dark: #b8b9be;
+  --clay-shadow-dark: #a3b1c6;
   --clay-shadow-light: #ffffff;
-  --clay-shadow-dark-inset: #cbd5e1;
+  --clay-shadow-dark-inset: #a3b1c6;
   --clay-shadow-light-inset: #ffffff;
 }
 
@@ -26,10 +26,10 @@
   --background: #0f172a;
   --foreground: #f1f5f9;
   --clay-surface: #1e293b;
-  --clay-shadow-dark: #0f172a;
-  --clay-shadow-light: #334155;
-  --clay-shadow-dark-inset: #0f172a;
-  --clay-shadow-light-inset: #334155;
+  --clay-shadow-dark: #a3b1c6;
+  --clay-shadow-light: #ffffff;
+  --clay-shadow-dark-inset: #a3b1c6;
+  --clay-shadow-light-inset: #ffffff;
 }
 
 body {

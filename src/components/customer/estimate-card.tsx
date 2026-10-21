@@ -80,11 +80,11 @@ export function EstimateCard({ estimate, onAccept, onReject }: EstimateCardProps
       </div>
 
       <div className="mt-6 space-y-3">
-        <div className="flex justify-between text-sm text-slate-600">
+        <div class="flex justify-between text-lg font-bold text-electric-blue">
           <span>Parts Total</span>
           <span>{formatCurrency(estimate.partsTotal)}</span>
         </div>
-        <div className="flex justify-between text-sm text-slate-600">
+        <div class="flex justify-between text-lg font-bold text-amber-600">
           <span>Labour Total</span>
           <span>{formatCurrency(estimate.labourTotal)}</span>
         </div>
