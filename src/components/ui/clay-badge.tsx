@@ -24,12 +24,12 @@ export interface ClayBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variantStyles: Record<ClayBadgeVariant, string> = {
-  default: "bg-slate-200 text-slate-700 shadow-clay-badge",
-  primary: "bg-electric-blue text-white shadow-clay-badge",
-  success: "bg-emerald-accent text-white shadow-clay-badge",
-  warning: "bg-amber-accent text-white shadow-clay-badge",
-  danger: "bg-rose-accent text-white shadow-clay-badge",
-  info: "bg-slate-600 text-white shadow-clay-badge",
+  default: "bg-[#f0ebe2] text-[#2d3748] shadow-clay-badge",
+  primary: "bg-electric-blue text-[#fdfbf7] shadow-[4px_4px_8px_rgba(37,99,235,0.35)]",
+  success: "bg-emerald-accent text-[#fdfbf7] shadow-[4px_4px_8px_rgba(5,150,105,0.35)]",
+  warning: "bg-amber-accent text-[#fdfbf7] shadow-[4px_4px_8px_rgba(217,119,6,0.35)]",
+  danger: "bg-rose-accent text-[#fdfbf7] shadow-[4px_4px_8px_rgba(225,29,72,0.35)]",
+  info: "bg-[#6b6258] text-[#2d3748] shadow-clay-badge",
   pending: "bg-amber-100 text-amber-800 shadow-clay-badge",
   confirmed: "bg-blue-100 text-blue-800 shadow-clay-badge",
   in_progress: "bg-blue-100 text-blue-800 shadow-clay-badge",

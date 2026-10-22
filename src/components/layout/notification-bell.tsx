@@ -87,7 +87,7 @@ export function NotificationBell() {
         aria-expanded={isOpen}
         aria-haspopup="dialog"
       >
-        <Bell className="h-5 w-5 text-slate-600 dark:text-slate-300" />
+        <Bell className="h-5 w-5 text-[#6b6258] dark:text-[#c4baa8]" />
         {unreadCount > 0 && (
           <ClayBadge variant="danger" className="absolute top-1 right-1 -mt-2 -mr-2 h-5 w-5 text-[10px] leading-none">
             {unreadCount}
@@ -97,8 +97,8 @@ export function NotificationBell() {
 
       {isOpen && (
         <div role="dialog" aria-label="Notifications" className="absolute bottom-full right-0 mb-2 w-80 max-w-[calc(100vw-2rem)] clay-card z-50 overflow-hidden">
-          <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-50 flex items-center gap-2">
+          <div className="p-4 border-b border-[#e2ddd0] dark:border-[#3a332c] flex items-center justify-between gap-2">
+            <h3 className="text-sm font-bold text-[#2d3748] dark:text-[#c4baa8] flex items-center gap-2">
               <Bell className="h-4 w-4" /> Notifications
             </h3>
             {unreadCount > 0 && (
@@ -116,15 +116,15 @@ export function NotificationBell() {
                 <div className="clay-empty-icon">
                   <Bell className="h-5 w-5" />
                 </div>
-                <p className="text-sm text-slate-500">You&apos;re all caught up</p>
+                <p className="text-sm text-[#9a9186]">You&apos;re all caught up</p>
               </div>
             ) : (
               visibleNotifications.map((n) => (
                 <button
                   key={n.id}
                   onClick={() => handleSelect(n.id)}
-                  className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-100 dark:hover:bg-slate-700/50 ${
-                    !n.read ? "bg-slate-50 dark:bg-slate-800/60" : ""
+                  className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-[#f0ebe2] dark:hover:bg-[#342e28]/50 ${
+                    !n.read ? "bg-[#f0ebe2] dark:bg-[#2a2420]/60" : ""
                   }`}
                 >
                   <div className={`shrink-0 p-1.5 rounded-lg ${
@@ -137,18 +137,18 @@ export function NotificationBell() {
                     {iconFor(n.type)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-slate-900 dark:text-slate-50 flex items-center gap-2">
+                    <div className="text-sm font-medium text-[#2d3748] dark:text-[#c4baa8] flex items-center gap-2">
                       {n.title}
                       {!n.read && <span className="h-1.5 w-1.5 rounded-full bg-electric-blue shrink-0" aria-label="Unread" />}
                     </div>
-                    <div className="text-xs text-slate-500 mt-0.5">{n.message}</div>
-                    <div className="text-[10px] text-slate-400 mt-1">{n.time}</div>
+                    <div className="text-xs text-[#9a9186] mt-0.5">{n.message}</div>
+                    <div className="text-[10px] text-[#b8aea5] mt-1">{n.time}</div>
                   </div>
                 </button>
               ))
             )}
           </div>
-          <div className="p-3 border-t border-slate-200 dark:border-slate-700 text-center">
+          <div className="p-3 border-t border-[#e2ddd0] dark:border-[#3a332c] text-center">
             {showAll ? (
               <ClayButton
                 variant="ghost"

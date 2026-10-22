@@ -6,6 +6,7 @@ export interface ClayInputProps extends React.InputHTMLAttributes<HTMLInputEleme
   label?: string;
   error?: string;
   helperText?: string;
+  labelClassName?: string;
 }
 
 export function ClayInput({
@@ -13,18 +14,19 @@ export function ClayInput({
   error,
   helperText,
   className,
+  labelClassName,
   ...props
 }: ClayInputProps) {
   return (
     <div className="w-full space-y-1.5">
       {label && (
-        <label className="block text-sm font-medium text-slate-700">
+        <label className={cn("block text-sm font-medium text-[#4a433a]", labelClassName)}>
           {label}
         </label>
       )}
       <input
         className={cn(
-          "clay-input w-full px-4 py-2.5 text-slate-900 placeholder-slate-400",
+          "clay-input w-full px-4 py-2.5 text-[#2d3748] placeholder-[#b8aea5]",
           error && "ring-1 ring-rose-accent",
           className
         )}
@@ -32,7 +34,7 @@ export function ClayInput({
       />
       {error && <p className="text-sm text-rose-accent">{error}</p>}
       {helperText && !error && (
-        <p className="text-xs text-slate-500">{helperText}</p>
+        <p className="text-xs text-[#9a9186]">{helperText}</p>
       )}
     </div>
   );
@@ -43,6 +45,7 @@ export interface ClayTextareaProps extends React.TextareaHTMLAttributes<HTMLText
   error?: string;
   helperText?: string;
   rows?: number;
+  labelClassName?: string;
 }
 
 export function ClayTextarea({
@@ -51,18 +54,19 @@ export function ClayTextarea({
   helperText,
   rows = 4,
   className,
+  labelClassName,
   ...props
 }: ClayTextareaProps) {
   return (
     <div className="w-full space-y-1.5">
       {label && (
-        <label className="block text-sm font-medium text-slate-700">
+        <label className={cn("block text-sm font-medium text-[#4a433a]", labelClassName)}>
           {label}
         </label>
       )}
       <textarea
         className={cn(
-          "clay-input w-full px-4 py-2.5 text-slate-900 placeholder-slate-400",
+          "clay-input w-full px-4 py-2.5 text-[#2d3748] placeholder-[#b8aea5]",
           error && "ring-1 ring-rose-accent",
           className
         )}
@@ -71,7 +75,7 @@ export function ClayTextarea({
       />
       {error && <p className="text-sm text-rose-accent">{error}</p>}
       {helperText && !error && (
-        <p className="text-xs text-slate-500">{helperText}</p>
+        <p className="text-xs text-[#9a9186]">{helperText}</p>
       )}
     </div>
   );
@@ -82,6 +86,7 @@ export interface ClaySelectProps
   label?: string;
   error?: string;
   helperText?: string;
+  labelClassName?: string;
 }
 
 export function ClaySelect({
@@ -89,18 +94,19 @@ export function ClaySelect({
   error,
   helperText,
   className,
+  labelClassName,
   ...props
 }: ClaySelectProps) {
   return (
     <div className="w-full space-y-1.5">
       {label && (
-        <label className="block text-sm font-medium text-slate-700">
+        <label className={cn("block text-sm font-medium text-[#4a433a]", labelClassName)}>
           {label}
         </label>
       )}
       <select
         className={cn(
-          "clay-input w-full px-4 py-2.5 text-slate-900 placeholder-slate-400 cursor-pointer appearance-none",
+          "clay-input w-full px-4 py-2.5 text-[#2d3748] placeholder-[#b8aea5] cursor-pointer appearance-none",
           error && "ring-1 ring-rose-accent",
           className
         )}
@@ -108,7 +114,7 @@ export function ClaySelect({
       />
       {error && <p className="text-sm text-rose-accent">{error}</p>}
       {helperText && !error && (
-        <p className="text-xs text-slate-500">{helperText}</p>
+        <p className="text-xs text-[#9a9186]">{helperText}</p>
       )}
     </div>
   );

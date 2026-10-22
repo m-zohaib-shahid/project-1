@@ -74,8 +74,8 @@ export default function PartsDashboard() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Parts Inventory</h1>
-          <p className="text-slate-500">Manage stock levels, purchase orders, and parts allocation</p>
+          <h1 className="text-2xl font-bold text-[#2d3748]">Parts Inventory</h1>
+          <p className="text-[#9a9186]">Manage stock levels, purchase orders, and parts allocation</p>
         </div>
         <div className="mt-4 md:mt-0 flex gap-2">
           <ClayButton variant="primary" size="sm" onClick={() => setPOModalOpen(true)} className="px-4 py-2">
@@ -105,14 +105,14 @@ export default function PartsDashboard() {
       </div>
 
       <div className="clay-card overflow-hidden">
-        <div className="p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="p-6 border-b border-[#e2ddd0] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Package className="h-4 w-4 text-slate-500" />
-            <span className="text-sm font-medium text-slate-700">Inventory Stock</span>
+            <Package className="h-4 w-4 text-[#9a9186]" />
+            <span className="text-sm font-medium text-[#4a433a]">Inventory Stock</span>
           </div>
           <div className="flex gap-2 w-full md:w-auto">
             <div className="relative flex-1 md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#b8aea5] pointer-events-none" />
               <ClayInput
                 placeholder="Search SKU or part name..."
                 value={search}
@@ -126,46 +126,46 @@ export default function PartsDashboard() {
 
         {filteredInventory.length === 0 ? (
           <div className="p-12 text-center">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="h-6 w-6 text-slate-400" />
+            <div className="w-16 h-16 bg-[#f0ebe2] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="h-6 w-6 text-[#b8aea5]" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900">No parts found</h3>
-            <p className="text-slate-500 text-sm">No inventory items match &ldquo;{search.trim()}&rdquo;.</p>
+            <h3 className="text-lg font-bold text-[#2d3748]">No parts found</h3>
+            <p className="text-[#9a9186] text-sm">No inventory items match &ldquo;{search.trim()}&rdquo;.</p>
             <ClayButton variant="ghost" size="sm" onClick={() => setSearch("")} className="mt-4 px-4 py-2">
               Clear search
             </ClayButton>
           </div>
         ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-left divide-y divide-slate-200">
+          <table className="w-full text-left divide-y divide-[#e2ddd0]">
             <thead>
-              <tr className="bg-slate-50">
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">SKU</th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">Name</th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">Category</th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">Qty</th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">Reorder</th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">Unit Cost</th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">Location</th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">Status</th>
-                <th className="px-6 py-3 text-xs font-medium text-slate-500 uppercase">Actions</th>
+              <tr className="bg-[#f0ebe2]">
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">SKU</th>
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">Name</th>
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">Category</th>
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">Qty</th>
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">Reorder</th>
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">Unit Cost</th>
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">Location</th>
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">Status</th>
+                <th className="px-6 py-3 text-xs font-medium text-[#9a9186] uppercase">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200">
+            <tbody className="divide-y divide-[#e2ddd0]">
               {filteredInventory.map((item) => {
                 const isLowStock = item.quantity <= item.reorderLevel;
                 const isOutOfStock = item.quantity === 0;
                 return (
-                  <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{item.sku}</td>
-                    <td className="px-6 py-4 text-sm text-slate-900">{item.name}</td>
-                    <td className="px-6 py-4 text-sm text-slate-500">{item.category}</td>
-                    <td className={`px-6 py-4 text-sm ${isOutOfStock ? "text-rose-600 font-medium" : isLowStock ? "text-amber-600 font-medium" : "text-slate-600"}`}>
+                  <tr key={item.id} className="hover:bg-[#f0ebe2] transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#2d3748]">{item.sku}</td>
+                    <td className="px-6 py-4 text-sm text-[#2d3748]">{item.name}</td>
+                    <td className="px-6 py-4 text-sm text-[#9a9186]">{item.category}</td>
+                    <td className={`px-6 py-4 text-sm ${isOutOfStock ? "text-rose-600 font-medium" : isLowStock ? "text-amber-600 font-medium" : "text-[#6b6258]"}`}>
                       {item.quantity}
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-500">{item.reorderLevel}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{formatCurrency(item.unitCost)}</td>
-                    <td className="px-6 py-4 text-sm text-slate-500">{item.location}</td>
+                    <td className="px-6 py-4 text-sm text-[#9a9186]">{item.reorderLevel}</td>
+                    <td className="px-6 py-4 text-sm text-[#6b6258]">{formatCurrency(item.unitCost)}</td>
+                    <td className="px-6 py-4 text-sm text-[#9a9186]">{item.location}</td>
                     <td className="px-6 py-4">
                       <ClayBadge variant={isOutOfStock ? "danger" : isLowStock ? "warning" : "success"} className="text-xs">
                         {isOutOfStock ? "Out of Stock" : isLowStock ? "Low Stock" : "In Stock"}
@@ -194,45 +194,45 @@ export default function PartsDashboard() {
       </div>
 
       <div className="clay-card overflow-hidden">
-        <div className="p-6 border-b border-slate-200">
-          <h2 className="text-lg font-bold text-slate-900">Jobs Awaiting Parts</h2>
+        <div className="p-6 border-b border-[#e2ddd0]">
+          <h2 className="text-lg font-bold text-[#2d3748]">Jobs Awaiting Parts</h2>
         </div>
         {jobsAwaitingParts.length === 0 ? (
           <div className="p-12 text-center">
             <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="h-7 w-7 text-emerald-600" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900">No jobs waiting on parts</h3>
-            <p className="text-slate-500 text-sm">
+            <h3 className="text-lg font-bold text-[#2d3748]">No jobs waiting on parts</h3>
+            <p className="text-[#9a9186] text-sm">
               {allocatedJobs.length > 0
                 ? "All pending part requests have been allocated."
                 : "Every job card has all the parts it needs."}
             </p>
           </div>
         ) : (
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-[#e2ddd0]">
           {jobsAwaitingParts.map((job) => {
             const vehicle = getVehicleById(job.vehicle.id);
             return (
-              <div key={job.id} className="p-6 flex justify-between items-start hover:bg-slate-50 transition-colors">
+              <div key={job.id} className="p-6 flex justify-between items-start hover:bg-[#f0ebe2] transition-colors">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs">
+                    <div className="w-8 h-8 rounded-full bg-[#f0ebe2] flex items-center justify-center text-[#6b6258] text-xs">
                       {vehicle?.make[0]}{vehicle?.model[0]}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-slate-900 text-sm">{vehicle?.make} {vehicle?.model}</div>
-                      <div className="text-xs text-slate-500">{vehicle?.plateNumber}</div>
+                      <div className="font-bold text-[#2d3748] text-sm">{vehicle?.make} {vehicle?.model}</div>
+                      <div className="text-xs text-[#9a9186]">{vehicle?.plateNumber}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-slate-600">
+                  <div className="flex items-center gap-3 text-sm text-[#6b6258]">
                     <span>Parts needed: {job.partsNeeded.length}</span>
                     <ClayBadge variant="warning" className="text-xs">Shortage</ClayBadge>
                   </div>
                   {job.partsNeeded.length > 0 && (
                     <ul className="mt-2 flex flex-wrap gap-2">
                       {job.partsNeeded.map((part) => (
-                        <li key={part} className="text-xs px-2 py-1 rounded-lg bg-slate-100 text-slate-600">
+                        <li key={part} className="text-xs px-2 py-1 rounded-lg bg-[#f0ebe2] text-[#6b6258]">
                           {part}
                         </li>
                       ))}
@@ -258,7 +258,7 @@ export default function PartsDashboard() {
 
       <ClayModal isOpen={poModalOpen} onClose={closePOModal} title="Create Purchase Order">
         <div className="space-y-4">
-          <p className="text-sm text-slate-600">Create a purchase order to restock low inventory items:</p>
+          <p className="text-sm text-[#6b6258]">Create a purchase order to restock low inventory items:</p>
           <div className="space-y-3">
             <ClayInput
               label="Supplier"
@@ -275,20 +275,20 @@ export default function PartsDashboard() {
               error={poTouched ? poErrors.expectedDelivery : undefined}
             />
           </div>
-          <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-            <h4 className="text-sm font-bold text-slate-900 mb-3">Suggested Items to Order</h4>
+          <div className="bg-[#f0ebe2] rounded-lg p-4 border border-[#e2ddd0]">
+            <h4 className="text-sm font-bold text-[#2d3748] mb-3">Suggested Items to Order</h4>
             {lowStockItems.length === 0 ? (
-              <p className="text-sm text-slate-500">No items are below their reorder level right now.</p>
+              <p className="text-sm text-[#9a9186]">No items are below their reorder level right now.</p>
             ) : (
             <div className="space-y-2">
               {lowStockItems.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-2 bg-white rounded border border-slate-200">
+                <div key={item.id} className="flex items-center justify-between p-2 bg-[#fefaf5] rounded border border-[#e2ddd0]">
                   <div>
-                    <div className="text-sm text-slate-900">{item.name}</div>
-                    <div className="text-xs text-slate-500">Current: {item.quantity} • Reorder: {item.reorderLevel}</div>
+                    <div className="text-sm text-[#2d3748]">{item.name}</div>
+                    <div className="text-xs text-[#9a9186]">Current: {item.quantity} • Reorder: {item.reorderLevel}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-medium text-slate-900">{formatCurrency(item.unitCost)}</div>
+                    <div className="text-sm font-medium text-[#2d3748]">{formatCurrency(item.unitCost)}</div>
                   </div>
                 </div>
               ))}
@@ -310,25 +310,25 @@ export default function PartsDashboard() {
         {detailItem && (
           <div className="space-y-4">
             <div>
-              <div className="font-bold text-slate-900">{detailItem.name}</div>
-              <div className="text-sm text-slate-500">SKU {detailItem.sku} • {detailItem.category}</div>
+              <div className="font-bold text-[#2d3748]">{detailItem.name}</div>
+              <div className="text-sm text-[#9a9186]">SKU {detailItem.sku} • {detailItem.category}</div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl bg-slate-50">
-                <div className="text-xs text-slate-500">Quantity</div>
-                <div className="text-lg font-bold text-slate-900">{detailItem.quantity}</div>
+              <div className="p-3 rounded-xl bg-[#f0ebe2]">
+                <div className="text-xs text-[#9a9186]">Quantity</div>
+                <div className="text-lg font-bold text-[#2d3748]">{detailItem.quantity}</div>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50">
-                <div className="text-xs text-slate-500">Reorder Level</div>
-                <div className="text-lg font-bold text-slate-900">{detailItem.reorderLevel}</div>
+              <div className="p-3 rounded-xl bg-[#f0ebe2]">
+                <div className="text-xs text-[#9a9186]">Reorder Level</div>
+                <div className="text-lg font-bold text-[#2d3748]">{detailItem.reorderLevel}</div>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50">
-                <div className="text-xs text-slate-500">Unit Cost</div>
-                <div className="text-lg font-bold text-slate-900">{formatCurrency(detailItem.unitCost)}</div>
+              <div className="p-3 rounded-xl bg-[#f0ebe2]">
+                <div className="text-xs text-[#9a9186]">Unit Cost</div>
+                <div className="text-lg font-bold text-[#2d3748]">{formatCurrency(detailItem.unitCost)}</div>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50">
-                <div className="text-xs text-slate-500">Location</div>
-                <div className="text-lg font-bold text-slate-900">{detailItem.location}</div>
+              <div className="p-3 rounded-xl bg-[#f0ebe2]">
+                <div className="text-xs text-[#9a9186]">Location</div>
+                <div className="text-lg font-bold text-[#2d3748]">{detailItem.location}</div>
               </div>
             </div>
             <ClayButton variant="ghost" size="sm" onClick={() => setDetailItem(null)} className="w-full px-4 py-2">
@@ -344,8 +344,8 @@ export default function PartsDashboard() {
 function StatCard({ label, value, color }: { label: string; value: number | string; color: string }) {
   return (
     <ClayCard padding="sm" className="text-center">
-      <div className={`text-slate-500 text-xs font-medium uppercase tracking-wider mb-1 ${color}`}>{label}</div>
-      <div className="text-2xl font-bold text-slate-900">{value}</div>
+      <div className={`text-[#9a9186] text-xs font-medium uppercase tracking-wider mb-1 ${color}`}>{label}</div>
+      <div className="text-2xl font-bold text-[#2d3748]">{value}</div>
     </ClayCard>
   );
 }

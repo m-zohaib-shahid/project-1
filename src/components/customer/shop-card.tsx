@@ -26,12 +26,12 @@ export function ShopCard({ shop }: ShopCardProps) {
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           className='object-cover group-hover:scale-105 transition-transform duration-300'
         />
-        <div className='absolute top-3 right-3 flex items-center gap-1 bg-white/90 backdrop-blur px-2 py-1 rounded-lg shadow-sm'>
+        <div className='absolute top-3 right-3 flex items-center gap-1 bg-[#fefaf5]/90 backdrop-blur px-2 py-1 rounded-lg shadow-sm'>
           <Star className='h-4 w-4 fill-yellow-400 text-yellow-500' />
-          <span className='text-sm font-bold text-slate-800'>{shop.rating}</span>
+          <span className='text-sm font-bold text-[#2d3748]'>{shop.rating}</span>
         </div>
         {!shop.isOpen && (
-          <div className='absolute bottom-3 left-3 bg-rose-accent/90 text-white px-3 py-1 rounded-lg text-sm font-medium shadow-sm'>
+          <div className='absolute bottom-3 left-3 bg-rose-accent/90 text-[#fdfbf7] px-3 py-1 rounded-lg text-sm font-medium shadow-sm'>
             Closed
           </div>
         )}
@@ -39,10 +39,10 @@ export function ShopCard({ shop }: ShopCardProps) {
       <div className='p-5 flex flex-col items-start gap-2 min-h-[280px]'>
         <div className='flex justify-between items-start mb-2 w-full'>
           <div className='flex-1'>
-            <h3 className='text-lg font-bold text-slate-900 line-clamp-1'>
+            <h3 className='text-lg font-bold text-[#2d3748] line-clamp-2'>
               {shop.name}
             </h3>
-            <p className='text-sm text-slate-500 line-clamp-1'>
+            <p className='text-sm text-[#9a9186] line-clamp-2'>
               {shop.address}, {shop.city}
             </p>
           </div>
@@ -53,11 +53,11 @@ export function ShopCard({ shop }: ShopCardProps) {
             {shop.isOpen ? 'Open' : 'Closed'}
           </ClayBadge>
         </div>
-        <div className='flex items-center gap-1.5 text-xs text-slate-500 mb-3 line-clamp-1'>
+        <div className='flex items-center gap-1.5 text-xs text-[#6b6258] mb-3 line-clamp-2'>
           <MapPin className='h-3.5 w-3.5' />
           {shop.address}
         </div>
-        <div className='flex items-center gap-2 text-sm text-slate-600 mb-3'>
+        <div className='flex items-center gap-2 text-sm text-[#6b6258] mb-3'>
           <Phone className='h-4 w-4' />
           <a
             href={`tel:${shop.phone.replace(/[^\d+]/g, "")}`}
@@ -76,7 +76,7 @@ export function ShopCard({ shop }: ShopCardProps) {
           {shop.services.slice(0, 3).map((service) => (
             <span
               key={service}
-              className='px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full font-medium'
+              className='px-2 py-1 bg-[#f0ebe2] text-[#6b6258] text-xs rounded-full font-medium'
             >
               {service}
             </span>
@@ -84,7 +84,7 @@ export function ShopCard({ shop }: ShopCardProps) {
         </div>
         <Link
           href={`/book?shop=${encodeURIComponent(shop.id)}`}
-          className={['w-full py-2.5 bg-electric-blue text-white rounded-xl font-semibold shadow-clay-button', 'hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4)]', 'transition-all', 'active:translate-y-[1px]', 'active:shadow-[inset_3px_3px_6px_rgba(163,177,198,0.2)]', 'text-center', isClosed && 'opacity-50 cursor-not-allowed'].filter(Boolean).join(' ')}
+          className={['w-full py-2.5 bg-electric-blue text-[#fdfbf7] rounded-xl font-semibold shadow-clay-button', 'hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4)]', 'transition-all', 'active:translate-y-[1px]', 'active:shadow-[inset_3px_3px_6px_rgba(163,177,198,0.2)]', 'text-center', isClosed && 'opacity-50 cursor-not-allowed'].filter(Boolean).join(' ')}
         >
           Book Now
         </Link>

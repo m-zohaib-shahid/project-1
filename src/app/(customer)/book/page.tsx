@@ -78,25 +78,25 @@ export default function BookingWizard() {
   const prevStep = () => setForm(prev => ({ ...prev, step: (prev.step - 1) as Step }));
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#f0ebe2]">
       <div className="max-w-5xl mx-auto px-6 py-8">
         <div className="clay-card p-8 mb-8">
           <div className="flex items-center justify-between mb-8">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Book Your Service</h2>
-              <p className="text-slate-500">Simple, transparent booking in 5 steps</p>
+              <h2 className="text-2xl font-bold text-[#2d3748] mb-2">Book Your Service</h2>
+              <p className="text-[#9a9186]">Simple, transparent booking in 5 steps</p>
             </div>
             <div className="text-right hidden sm:block">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Step {form.step} of 5</div>
-              <div className="text-lg font-bold text-slate-900">{getStepTitle(form.step)}</div>
+              <div className="text-xs text-[#b8aea5] uppercase tracking-wider mb-1">Step {form.step} of 5</div>
+              <div className="text-lg font-bold text-[#2d3748]">{getStepTitle(form.step)}</div>
             </div>
           </div>
-          <div className="relative h-2 bg-slate-200 rounded-full overflow-hidden">
+          <div className="relative h-2 bg-[#e8e2d4] rounded-full overflow-hidden">
             <div className="h-full bg-electric-blue rounded-full transition-all duration-500" style={{ width: `${(form.step / 5) * 100}%` }} />
           </div>
-          <div className="flex justify-between mt-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
+          <div className="flex justify-between mt-4 text-xs font-medium text-[#9a9186] uppercase tracking-wider">
             {["Select Shop","Select Services","Date & Time","Vehicle & Account","Confirmation"].map((label, i) => (
-              <span key={label} className={i + 1 === form.step ? "text-electric-blue font-bold" : "text-slate-400"}>{label}</span>
+              <span key={label} className={i + 1 === form.step ? "text-electric-blue font-bold" : "text-[#b8aea5]"}>{label}</span>
             ))}
           </div>
         </div>
@@ -172,13 +172,13 @@ function Step1Content({
             <button
               key={shop.id}
               onClick={() => setForm(prev => ({ ...prev, selectedShopId: shop.id }))}
-              className={`clay-card p-6 cursor-pointer transition-all duration-200 flex flex-col items-center text-center ${isSelected ? "ring-2 ring-electric-blue bg-electric-blue/5" : "hover:bg-slate-100"}`}
+              className={`clay-card p-6 cursor-pointer transition-all duration-200 flex flex-col items-center text-center ${isSelected ? "ring-2 ring-electric-blue bg-electric-blue/5" : "hover:bg-[#e8e2d4]"}`}
             >
-              <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center mb-4 text-slate-600">
+              <div className="w-16 h-16 rounded-full bg-[#e8e2d4] flex items-center justify-center mb-4 text-[#6b6258]">
                 <span className="text-xl">🏪</span>
               </div>
-              <h4 className="font-bold text-slate-900 mb-1">{shop.name}</h4>
-              <p className="text-sm text-slate-500 mb-2">{shop.city}</p>
+              <h4 className="font-bold text-[#2d3748] mb-1">{shop.name}</h4>
+              <p className="text-sm text-[#9a9186] mb-2">{shop.city}</p>
               <div className="flex items-center gap-1 text-xs">
                 <span className="text-yellow-500">★</span>
                 <span>{shop.rating}</span>
@@ -222,14 +222,14 @@ function Step2Content({
               key={service.id}
               className="cursor-pointer"
             >
-              <ClayCard padding="md" className={`transition-all duration-200 ${isSelected ? "ring-2 ring-electric-blue bg-electric-blue/5" : "hover:bg-slate-100"}`}>
+              <ClayCard padding="md" className={`transition-all duration-200 ${isSelected ? "ring-2 ring-electric-blue bg-electric-blue/5" : "hover:bg-[#e8e2d4]"}`}>
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-bold text-slate-900">{service.name}</h4>
+                  <h4 className="font-bold text-[#2d3748]">{service.name}</h4>
                   <span className="text-sm font-medium text-electric-blue">${service.basePrice}</span>
                 </div>
-                <p className="text-sm text-slate-500 mb-4">{service.description}</p>
+                <p className="text-sm text-[#9a9186] mb-4">{service.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">{service.duration} min</span>
+                  <span className="text-xs text-[#b8aea5]">{service.duration} min</span>
                   <input
                     type="checkbox"
                     checked={isSelected}
@@ -237,7 +237,7 @@ function Step2Content({
                       ...prev,
                       selectedServices: prev.selectedServices.map(s => s.id === service.id ? { ...s, selected: !s.selected } : s),
                     }))}
-                    className="h-5 w-5 text-electric-blue rounded border-slate-300 cursor-pointer"
+                    className="h-5 w-5 text-electric-blue rounded border-[#e2ddd0] cursor-pointer"
                   />
                 </div>
               </ClayCard>
@@ -281,10 +281,10 @@ function Step3Content({
               min="2026-10-21"
             />
           </div>
-          <p className="text-sm text-slate-500">Select your preferred service date</p>
+          <p className="text-sm text-[#9a9186]">Select your preferred service date</p>
         </div>
         <div className="space-y-4">
-          <h4 className="text-sm font-bold text-slate-700 mb-3">Available Time Slots</h4>
+          <h4 className="text-sm font-bold text-[#4a433a] mb-3">Available Time Slots</h4>
           <div className="grid grid-cols-5 gap-3">
             {["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"].map((slot) => {
               const isSelected = form.selectedTime === slot;
@@ -292,7 +292,7 @@ function Step3Content({
                 <button
                   key={slot}
                   onClick={() => setForm(prev => ({ ...prev, selectedTime: slot }))}
-                  className={`h-12 rounded-xl flex items-center justify-center font-medium transition-all ${isSelected ? "bg-electric-blue text-white shadow-[4px_4px_8px_#1d4ed8]" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
+                  className={`h-12 rounded-xl flex items-center justify-center font-medium transition-all ${isSelected ? "bg-electric-blue text-[#fdfbf7] shadow-[4px_4px_8px_#1d4ed8]" : "bg-[#f0ebe2] text-[#6b6258] hover:bg-[#e8e2d4]"}`}
                 >
                   {slot}
                 </button>
@@ -339,7 +339,7 @@ function Step4Content({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div className="space-y-4">
-        <h3 className="text-lg font-bold text-slate-900 mb-2">Vehicle Details</h3>
+        <h3 className="text-lg font-bold text-[#2d3748] mb-2">Vehicle Details</h3>
         <div className="space-y-3">
           <ClayInput label="Make" value={form.vehicle.make} error={touched ? errors.vehicleMake : undefined} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, make: e.target.value } }))} />
           <ClayInput label="Model" value={form.vehicle.model} error={touched ? errors.vehicleModel : undefined} onChange={(e) => setForm(prev => ({ ...prev, vehicle: { ...prev.vehicle, model: e.target.value } }))} />
@@ -348,7 +348,7 @@ function Step4Content({
         </div>
       </div>
       <div className="space-y-4">
-        <h3 className="text-lg font-bold text-slate-900 mb-2">Account Details</h3>
+        <h3 className="text-lg font-bold text-[#2d3748] mb-2">Account Details</h3>
         <div className="space-y-3">
           <ClayInput label="Full Name" value={form.customer.name} error={touched ? errors.name : undefined} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, name: e.target.value } }))} />
           <ClayInput label="Email" type="email" value={form.customer.email} error={touched ? errors.email : undefined} onChange={(e) => setForm(prev => ({ ...prev, customer: { ...prev.customer, email: e.target.value } }))} />
@@ -384,37 +384,38 @@ function Step5Content({
       <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[4px_4px_8px_#047857]">
         <span className="text-2xl">✓</span>
       </div>
-      <h2 className="text-3xl font-bold text-slate-900 mb-2">Booking Confirmed!</h2>
-      <p className="text-slate-500 mb-8">
+      <h2 className="text-3xl font-bold text-[#2d3748] mb-2">Booking Confirmed!</h2>
+      <p className="text-[#9a9186] mb-8">
         Your appointment has been scheduled. We&apos;ll send a confirmation email to {form.customer.email}.
       </p>
       <div className="clay-card p-8 mb-8">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h4 className="font-bold text-slate-900">{selectedShop?.name}</h4>
-            <p className="text-sm text-slate-500">{selectedShop?.address}</p>
+            <h4 className="font-bold text-[#2d3748]">{selectedShop?.name}</h4>
+            <p className="text-sm text-[#9a9186]">{selectedShop?.address}</p>
           </div>
           <div className="text-right">
-            <div className="text-xs text-slate-400">Vehicle</div>
-            <div className="font-medium text-slate-900">{form.vehicle.year} {form.vehicle.make} {form.vehicle.model}</div>
+            <div className="text-xs text-[#b8aea5]">Vehicle</div>
+            <div className="font-medium text-[#2d3748]">{form.vehicle.year} {form.vehicle.make} {form.vehicle.model}</div>
           </div>
         </div>
         <div className="space-y-3 mb-6">
           {form.selectedServices.filter(s => s.selected).map((svc) => (
             <div key={svc.id} className="flex justify-between items-center text-sm">
-              <span className="text-slate-600">{svc.name}</span>
-              <span className="font-medium text-slate-900">${svc.price}</span>
+              <span className="text-[#6b6258]">{svc.name}</span>
+              <span className="font-medium text-[#2d3748]">${svc.price}</span>
             </div>
           ))}
-          <div className="border-t pt-3 flex justify-between items-center text-lg font-bold text-slate-900">
+          <div className="border-t pt-3 flex justify-between items-center text-lg font-bold text-[#2d3748]">
             <span>Total</span>
             <span>${totalPrice}</span>
           </div>
         </div>
       </div>
-      <button onClick={() => setForm(prev => ({ ...prev, step: 1 as Step }))} className="clay-btn w-full py-3 bg-electric-blue text-white rounded-xl font-semibold shadow-[4px_4px_8px_#1d4ed8]">
+      <button onClick={() => setForm(prev => ({ ...prev, step: 1 as Step }))} className="clay-btn w-full py-3 bg-electric-blue text-[#fdfbf7] rounded-xl font-semibold shadow-[4px_4px_8px_#1d4ed8]">
         Book Another
       </button>
     </div>
   );
 }
+

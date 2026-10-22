@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { Search, ChevronRight, Star, BookOpen } from "lucide-react";
 import { SHOPS, SERVICES } from "@/lib/mockData";
 import { ClayButton } from "@/components/ui/clay-button";
-import { ClayInput } from "@/components/ui/clay-input";
+import { ClayInput, ClaySelect } from "@/components/ui/clay-input";
 import { ClayCard } from "@/components/ui/clay-card";
 import { ShopCard } from "@/components/customer/shop-card";
 
@@ -33,8 +33,8 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="relative bg-white overflow-hidden">
+    <div className="min-h-screen bg-[#fdfbf7]">
+      <div className="relative bg-[#fefaf5] overflow-hidden">
         <div className="absolute inset-0 bg-electric-blue/5"></div>
         <div className="relative max-w-7xl mx-auto px-6 py-16 lg:py-24">
           <div className="text-center max-w-3xl mx-auto">
@@ -45,16 +45,16 @@ export default function LandingPage() {
               </span>
               Now serving Austin, Dallas & Houston
             </div>
-            <h1 className="text-5xl lg:text-7xl font-bold text-slate-900 tracking-tight mb-6 leading-tight">
+            <h1 className="text-5xl lg:text-7xl font-bold text-[#2d3748] tracking-tight mb-6 leading-tight">
               Keep Your Car Running <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-blue to-blue-500">Smoothly.</span>
             </h1>
-            <p className="text-lg text-slate-600 mb-10 max-w-lg mx-auto">
+            <p className="text-lg text-[#6b6258] mb-10 max-w-lg mx-auto">
               Find the best auto repair shops near you. Book services, track repairs in real-time,
               and manage estimates — all from one app.
             </p>
             <div className="mt-4 text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-700 text-sm font-medium mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0ebe2] text-[#4a433a] text-sm font-medium mb-4">
                 <Star className="h-3 w-3 fill-yellow-400 text-yellow-500" />
                 Trusted by 5,000+ car owners across Texas
               </div>
@@ -63,35 +63,67 @@ export default function LandingPage() {
               <ClayButton
                 variant="primary"
                 size="lg"
-                className="px-8 py-3 font-semibold transition-all hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4)]"
-                onClick={(e) => {
-                  e.preventDefault();
-                  // Smooth scroll effect before navigation
-                  setTimeout(() => {
-                    window.location.href = "/book";
-                  }, 150);
-                }}
+                                className="px-8 py-3 font-semibold transition-all hover:shadow-[6px_6px_12px_rgba(60,50,35,0.12)]"
+                onClick={() => { window.location.href = '/book'; }}
               >
-                <a href="/book" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
-                  <BookOpen className="h-5 w-5" /> Find Shops Near You
-                </a>
+                <BookOpen className="h-5 w-5 mr-2" /> Find Shops Near You
               </ClayButton>
-            <div className="flex gap-1 sm:gap-2" role="tablist" aria-label="City filter">                {cities.map((city) => (                  <button                    key={city}                    role="tab"                    aria-selected={city === cityFilter}                    onClick={() => setCityFilter(city)}                    className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${city === "all" ? "bg-slate-100 text-slate-700 hover:bg-slate-200" : "bg-slate-200 text-slate-600 hover:bg-slate-300"} ${cityFilter === city ? "bg-electric-blue text-white shadow-sm" : ""}`}                  >                    {city === "all" ? "All Cities" : city}                  </button>                ))}              </div>
-              <ClayButton variant="primary" size="lg" className="w-full sm:w-auto" onClick={scrollToListings}>
-                Find a Shop <ChevronRight className="ml-2 h-4 w-4" />
+              <ClayButton
+                variant="ghost"
+                size="lg"
+                className="px-8 py-3 font-semibold transition-all"
+              >
+                Browse Services
               </ClayButton>
+            </div>
+            {/* Search & Filter Bar */}
+            <div className="mt-10 mx-auto max-w-2xl">
+              <div className="clay-card p-3 shadow-clay-card rounded-2xl flex flex-col sm:flex-row gap-3 items-center sm:items-start">
+                <div className="flex-1 min-w-[200px]">
+                  <ClayInput
+                    label="Search shops or services"
+                    placeholder="e.g. brake service, Austin..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div className="w-full sm:w-64 min-w-[160px]">
+                  <ClaySelect
+                    label="City"
+                    value={cityFilter}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCityFilter(e.target.value as "all" | string)}
+                    className="w-full"
+                  >
+                    <option value="all">All Cities</option>
+                    {cities.slice(1).map((city) => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </ClaySelect>
+                </div>
+                <ClayButton
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    scrollToListings();
+                  }}
+                  className="px-6 whitespace-nowrap sm:mt-0"
+                >
+                  <Search className="h-4 w-4 mr-2" /> Search
+                </ClayButton>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Featured Services */}
-      <div className="bg-white py-16 border-y border-slate-200">
+      <div className="bg-[#fefaf5] py-16 border-y border-[#e2ddd0]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-end mb-10">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">Popular Services</h2>
-              <p className="text-slate-500">Everything your vehicle needs</p>
+              <h2 className="text-2xl font-bold text-[#2d3748]">Popular Services</h2>
+              <p className="text-[#9a9186]">Everything your vehicle needs</p>
             </div>
             <button
               type="button"
@@ -104,14 +136,14 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {featuredServices.map((service) => (
               <ClayCard key={service.id} padding="sm" className="text-center group">
-                <div className="w-12 h-12 bg-electric-blue/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-electric-blue group-hover:text-white transition-colors">
+                <div className="w-12 h-12 bg-electric-blue/10 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-electric-blue group-hover:text-[#fdfbf7] transition-colors">
                   <span className="text-lg">{getServiceIcon(service.category)}</span>
                 </div>
-                <h4 className="font-bold text-slate-900 mb-1">{service.name}</h4>
-                <p className="text-sm text-slate-500 mb-3">{service.description}</p>
+                <h4 className="font-bold text-[#2d3748] mb-1">{service.name}</h4>
+                <p className="text-sm text-[#9a9186] mb-3">{service.description}</p>
                 <div className="flex justify-center items-baseline gap-1">
-                  <span className="text-lg font-bold text-slate-900">${service.basePrice}</span>
-                  <span className="text-xs text-slate-400">• {service.duration} min</span>
+                  <span className="text-lg font-bold text-[#2d3748]">${service.basePrice}</span>
+                  <span className="text-xs text-[#b8aea5]">• {service.duration} min</span>
                 </div>
               </ClayCard>
             ))}
@@ -124,8 +156,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center mb-10">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">Top Repair Shops</h2>
-              <p className="text-slate-500">Find a trusted shop near you</p>
+              <h2 className="text-2xl font-bold text-[#2d3748]">Top Repair Shops</h2>
+              <p className="text-[#9a9186]">Find a trusted shop near you</p>
             </div>
             <button
               type="button"
@@ -146,7 +178,7 @@ export default function LandingPage() {
           </div>
           {filteredShops.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-slate-500 text-lg">No shops found matching your search.</p>
+              <p className="text-[#9a9186] text-lg">No shops found matching your search.</p>
             </div>
           )}
         </div>

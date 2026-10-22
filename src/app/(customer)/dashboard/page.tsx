@@ -29,12 +29,12 @@ export default function CustomerDashboard() {
   const primaryShop = getShopById(bookings[0]?.shopId ?? "shop-1");
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#f0ebe2]">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Welcome back, Alex</h1>
-            <p className="text-slate-500">Here&apos;s what&apos;s happening with your vehicles</p>
+            <h1 className="text-3xl font-bold text-[#2d3748]">Welcome back, Alex</h1>
+            <p className="text-[#9a9186]">Here&apos;s what&apos;s happening with your vehicles</p>
           </div>
           <div className="mt-4 md:mt-0 flex items-center gap-3">
             <ClayButton
@@ -61,7 +61,7 @@ export default function CustomerDashboard() {
         </div>
 
         <div className="mb-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Live Service Tracker</h2>
+          <h2 className="text-xl font-bold text-[#2d3748] mb-6">Live Service Tracker</h2>
           <ClayCard padding="lg">
             <div className="space-y-6">
               {bookings.map((booking) => {
@@ -73,12 +73,12 @@ export default function CustomerDashboard() {
                   <div key={booking.id} className="flex gap-6">
                     <div className="w-64 shrink-0">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
+                        <div className="w-10 h-10 rounded-full bg-[#f0ebe2] flex items-center justify-center text-[#6b6258]">
                           <Wrench className="h-5 w-5" />
                         </div>
                         <div>
-                          <div className="font-bold text-slate-900">{vehicle?.make} {vehicle?.model}</div>
-                          <div className="text-xs text-slate-500">{vehicle?.plateNumber}</div>
+                          <div className="font-bold text-[#2d3748]">{vehicle?.make} {vehicle?.model}</div>
+                          <div className="text-xs text-[#9a9186]">{vehicle?.plateNumber}</div>
                         </div>
                       </div>
                       <StatusTimeline currentStatus={booking.status} />
@@ -96,19 +96,19 @@ export default function CustomerDashboard() {
                           )}
                         </div>
                         <div className="text-right">
-                          <div className="text-sm font-medium text-slate-900">{formatDateTime(booking.scheduledAt)}</div>
-                          <div className="text-xs text-slate-500">{booking.technicianId ? "Assigned technician" : "Not assigned"}</div>
+                          <div className="text-sm font-medium text-[#2d3748]">{formatDateTime(booking.scheduledAt)}</div>
+                          <div className="text-xs text-[#9a9186]">{booking.technicianId ? "Assigned technician" : "Not assigned"}</div>
                         </div>
                       </div>
-                      <div className="bg-slate-50 rounded-xl p-4">
+                      <div className="bg-[#f0ebe2] rounded-xl p-4">
                         <div className="flex justify-between items-center mb-3">
-                          <span className="text-sm font-medium text-slate-700">Services:</span>
-                          <span className="text-sm text-slate-500">{service.map(s => s.name).join(", ")}</span>
+                          <span className="text-sm font-medium text-[#4a433a]">Services:</span>
+                          <span className="text-sm text-[#9a9186]">{service.map(s => s.name).join(", ")}</span>
                         </div>
                         {booking.notes && (
                           <div className="flex justify-between items-center">
-                            <span className="text-sm font-medium text-slate-700">Notes:</span>
-                            <span className="text-sm text-slate-500">{booking.notes}</span>
+                            <span className="text-sm font-medium text-[#4a433a]">Notes:</span>
+                            <span className="text-sm text-[#9a9186]">{booking.notes}</span>
                           </div>
                         )}
                       </div>
@@ -143,7 +143,7 @@ export default function CustomerDashboard() {
 
         {pendingEstimate && (
           <div className="mb-8">
-            <h2 className="text-xl font-bold text-slate-900 mb-6">Pending Estimate</h2>
+            <h2 className="text-xl font-bold text-[#2d3748] mb-6">Pending Estimate</h2>
             <ClayCard padding="lg">
               <EstimateCard
                 estimate={{ ...pendingEstimate, status: estimateStatus[pendingEstimate.id] }}
@@ -162,12 +162,12 @@ export default function CustomerDashboard() {
 
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-slate-900">Booking History</h2>
+            <h2 className="text-xl font-bold text-[#2d3748]">Booking History</h2>
             <div className="flex gap-2">
-              <button onClick={() => setActiveTab("active")} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "active" ? "bg-electric-blue text-white shadow-sm" : "bg-slate-200 text-slate-600 hover:bg-slate-300"}`}>
+              <button onClick={() => setActiveTab("active")} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "active" ? "bg-electric-blue text-[#fdfbf7] shadow-sm" : "bg-[#e8e2d4] text-[#6b6258] hover:bg-[#d4ccc0]"}`}>
                 Active
               </button>
-              <button onClick={() => setActiveTab("past")} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "past" ? "bg-electric-blue text-white shadow-sm" : "bg-slate-200 text-slate-600 hover:bg-slate-300"}`}>
+              <button onClick={() => setActiveTab("past")} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "past" ? "bg-electric-blue text-[#fdfbf7] shadow-sm" : "bg-[#e8e2d4] text-[#6b6258] hover:bg-[#d4ccc0]"}`}>
                 Past
               </button>
             </div>
@@ -177,19 +177,19 @@ export default function CustomerDashboard() {
               {bookings.filter(b => activeTab === "active" ? b.status !== "COMPLETED" && b.status !== "CANCELLED" : b.status === "COMPLETED" || b.status === "CANCELLED").map((booking) => {
                 const vehicle = getVehicleById(booking.vehicleId);
                 return (
-                  <div key={booking.id} className="p-6 flex justify-between items-start hover:bg-slate-50 transition-colors">
+                  <div key={booking.id} className="p-6 flex justify-between items-start hover:bg-[#f0ebe2] transition-colors">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs">
+                        <div className="w-8 h-8 rounded-full bg-[#f0ebe2] flex items-center justify-center text-[#6b6258] text-xs">
                           {vehicle?.make[0]}{vehicle?.model[0]}
                         </div>
                         <div>
-                          <div className="font-bold text-slate-900">{vehicle?.make} {vehicle?.model}</div>
-                          <div className="text-xs text-slate-500">{vehicle?.plateNumber}</div>
+                          <div className="font-bold text-[#2d3748]">{vehicle?.make} {vehicle?.model}</div>
+                          <div className="text-xs text-[#9a9186]">{vehicle?.plateNumber}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-4 text-sm">
-                        <span className="text-slate-600">{formatDateTime(booking.scheduledAt)}</span>
+                        <span className="text-[#6b6258]">{formatDateTime(booking.scheduledAt)}</span>
                         <ClayBadge variant={bookingStatusVariant(booking.status)} className="text-xs">
                           {STATUS_LABELS[booking.status].label}
                         </ClayBadge>
@@ -197,7 +197,7 @@ export default function CustomerDashboard() {
                     </div>
                     <div className="text-right">
                       {booking.totalAmount && (
-                        <div className="text-lg font-bold text-slate-900">{formatCurrency(booking.totalAmount)}</div>
+                        <div className="text-lg font-bold text-[#2d3748]">{formatCurrency(booking.totalAmount)}</div>
                       )}
                       <button
                         type="button"
@@ -211,7 +211,7 @@ export default function CustomerDashboard() {
                 );
               })}
               {bookings.length === 0 && (
-                <div className="p-8 text-center text-slate-500">
+                <div className="p-8 text-center text-[#9a9186]">
                   No bookings found.
                 </div>
               )}
@@ -228,31 +228,31 @@ export default function CustomerDashboard() {
             <div className="space-y-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <div className="font-bold text-slate-900">
+                  <div className="font-bold text-[#2d3748]">
                     {detailVehicle ? `${detailVehicle.make} ${detailVehicle.model}` : "Vehicle"}
                   </div>
-                  <div className="text-sm text-slate-500">{detailVehicle?.plateNumber}</div>
+                  <div className="text-sm text-[#9a9186]">{detailVehicle?.plateNumber}</div>
                 </div>
                 <ClayBadge variant={bookingStatusVariant(detailBooking.status)} className="text-xs">
                   {STATUS_LABELS[detailBooking.status].label}
                 </ClayBadge>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-50 text-sm text-slate-600">
-                <span className="font-medium text-slate-900">Scheduled:</span>{" "}
+              <div className="p-3 rounded-xl bg-[#f0ebe2] text-sm text-[#6b6258]">
+                <span className="font-medium text-[#2d3748]">Scheduled:</span>{" "}
                 {formatDateTime(detailBooking.scheduledAt)}
               </div>
 
               <div>
-                <div className="text-sm font-semibold text-slate-900 mb-2">Services</div>
+                <div className="text-sm font-semibold text-[#2d3748] mb-2">Services</div>
                 {detailServices.length === 0 ? (
-                  <p className="text-sm text-slate-500">No services on this booking.</p>
+                  <p className="text-sm text-[#9a9186]">No services on this booking.</p>
                 ) : (
                   <ul className="space-y-1">
                     {detailServices.map((s) => (
-                      <li key={s.id} className="text-sm text-slate-600 flex justify-between gap-4">
+                      <li key={s.id} className="text-sm text-[#6b6258] flex justify-between gap-4">
                         <span>{s.name}</span>
-                        <span className="text-slate-500">{formatCurrency(s.basePrice)}</span>
+                        <span className="text-[#9a9186]">{formatCurrency(s.basePrice)}</span>
                       </li>
                     ))}
                   </ul>
@@ -266,7 +266,7 @@ export default function CustomerDashboard() {
               )}
 
               {detailBooking.totalAmount && (
-                <div className="flex justify-between border-t pt-3 text-lg font-bold text-slate-900">
+                <div className="flex justify-between border-t pt-3 text-lg font-bold text-[#2d3748]">
                   <span>Total</span>
                   <span>{formatCurrency(detailBooking.totalAmount)}</span>
                 </div>
@@ -294,9 +294,9 @@ function StatCard({
     <ClayCard padding="sm" className="text-center">
       <div className="flex items-center justify-center gap-2 mb-1">
         <span className={color}>{icon}</span>
-        <span className="text-slate-500 text-xs font-medium uppercase tracking-wider">{label}</span>
+        <span className="text-[#9a9186] text-xs font-medium uppercase tracking-wider">{label}</span>
       </div>
-      <div className="text-2xl font-bold text-slate-900">{value}</div>
+      <div className="text-2xl font-bold text-[#2d3748]">{value}</div>
     </ClayCard>
   );
 }

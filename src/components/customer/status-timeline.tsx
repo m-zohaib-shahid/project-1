@@ -80,7 +80,7 @@ export function StatusTimeline({ currentStatus, steps }: StatusTimelineProps) {
       <div className="overflow-x-auto pb-2">
         <div className="relative min-w-[560px]">
           {/* Progress line */}
-          <div className="absolute top-6 left-2 right-2 -z-10 h-1 bg-slate-200 rounded-full">
+          <div className="absolute top-6 left-2 right-2 -z-10 h-1 bg-[#e8e2d4] rounded-full">
             <div
               className="h-full bg-electric-blue rounded-full transition-all duration-500"
               style={{
@@ -102,10 +102,10 @@ export function StatusTimeline({ currentStatus, steps }: StatusTimelineProps) {
               <div key={step.key} className="flex flex-col items-center gap-2">
                 <div className={`relative w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                   isCompletedStep
-                    ? "bg-electric-blue text-white shadow-[4px_4px_8px_#1d4ed8]"
+                    ? "bg-electric-blue text-[#fdfbf7] shadow-[4px_4px_8px_#1d4ed8]"
                     : isPending
-                    ? "bg-slate-200 text-slate-400 shadow-clay-sm"
-                    : "bg-white text-electric-blue border-2 border-electric-blue shadow-sm"
+                    ? "bg-[#e8e2d4] text-[#b8aea5] shadow-clay-sm"
+                    : "bg-[#fefaf5] text-electric-blue border-2 border-electric-blue shadow-sm"
                 }`}>
                   {isCompletedStep ? (
                     <span className="text-xs font-bold">✓</span>
@@ -114,10 +114,10 @@ export function StatusTimeline({ currentStatus, steps }: StatusTimelineProps) {
                   )}
                 </div>
                 <div className="text-xs font-medium text-center w-20">
-                  <span className={cn("block", isActive ? "text-electric-blue font-bold" : "text-slate-600")}>
+                  <span className={cn("block", isActive ? "text-electric-blue font-bold" : "text-[#6b6258]")}>
                     {step.label}
                   </span>
-                  <span className="text-[10px] text-slate-400">{step.description}</span>
+                  <span className="text-[10px] text-[#b8aea5]">{step.description}</span>
                 </div>
               </div>
             );

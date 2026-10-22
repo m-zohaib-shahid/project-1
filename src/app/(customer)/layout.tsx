@@ -1,3 +1,7 @@
 export default function CustomerLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-slate-50">{children}</div>;
+  return (
+    <div className="min-h-screen bg-[#fdfbf7]">
+      <main id="main-content">{children}</main>
+    </div>
+  );
 }

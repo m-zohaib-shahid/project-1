@@ -13,17 +13,17 @@ export interface ClayButtonProps
 
 const variantStyles: Record<string, string> = {
   // Default primary: solid clay button with tactile depth
-  primary: "bg-electric-blue text-white shadow-clay-button hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4)] transition-shadow",
+  primary: "bg-electric-blue text-[#fdfbf7] shadow-clay-button hover:shadow-[6px_6px_12px_rgba(37,99,235,0.4)] transition-shadow",
   // Secondary: subtle clay button
-  secondary: "bg-slate-100 text-slate-900 shadow-clay-sm hover:bg-slate-100 transition-shadow",
+  secondary: "bg-[#f0ebe2] text-[#2d3748] shadow-clay-sm hover:bg-[#e8e2d4] transition-shadow",
   // Success: positive action
-  success: "bg-emerald-accent text-white shadow-clay-button hover:shadow-[6px_6px_12px_rgba(5,150,105,0.4)] transition-shadow",
+  success: "bg-emerald-accent text-[#fdfbf7] shadow-clay-button hover:shadow-[6px_6px_12px_rgba(5,150,105,0.4)] transition-shadow",
   // Warning: attention action
-  warning: "bg-amber-accent text-white shadow-clay-button hover:shadow-[6px_6px_12px_rgba(181,85,9,0.4)] transition-shadow",
+  warning: "bg-amber-accent text-[#fdfbf7] shadow-clay-button hover:shadow-[6px_6px_12px_rgba(217,119,6,0.4)] transition-shadow",
   // Danger: destructive action
-  danger: "bg-rose-accent text-white shadow-clay-button hover:shadow-[6px_6px_12px_rgba(220,38,38,0.4)] transition-shadow",
+  danger: "bg-rose-accent text-[#fdfbf7] shadow-clay-button hover:shadow-[6px_6px_12px_rgba(225,29,72,0.4)] transition-shadow",
   // Ghost: transparent with subtle shadow on hover
-  ghost: "bg-transparent text-slate-600 shadow-none hover:bg-slate-200 hover:shadow-clay-sm transition-shadow",
+  ghost: "bg-transparent text-[#6b6258] shadow-none hover:bg-[#f0ebe2] hover:shadow-clay-sm transition-shadow",
 };
 
 const sizeStyles: Record<string, string> = {
@@ -57,7 +57,7 @@ export function ClayButton({
     >
       {isLoading ? (
         <svg
-          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+          className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#fdfbf7]"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

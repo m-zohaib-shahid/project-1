@@ -92,8 +92,8 @@ export default function TechnicianDashboard() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Technician Dashboard</h1>
-          <p className="text-slate-500">Manage your assigned jobs and vehicle inspections</p>
+          <h1 className="text-2xl font-bold text-[#2d3748]">Technician Dashboard</h1>
+          <p className="text-[#9a9186]">Manage your assigned jobs and vehicle inspections</p>
         </div>
         <div className="mt-4 md:mt-0 flex gap-2">
           <ClayButton
@@ -129,17 +129,17 @@ export default function TechnicianDashboard() {
       </div>
 
       <div className="clay-card overflow-hidden">
-        <div className="p-6 border-b border-slate-200">
-          <h2 className="text-lg font-bold text-slate-900">Assigned Jobs</h2>
+        <div className="p-6 border-b border-[#e2ddd0]">
+          <h2 className="text-lg font-bold text-[#2d3748]">Assigned Jobs</h2>
         </div>
-        <div className="divide-y divide-slate-200">
+        <div className="divide-y divide-[#e2ddd0]">
           {jobCards.length === 0 ? (
             <div className="p-12 text-center">
-              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Wrench className="h-7 w-7 text-slate-400" />
+              <div className="w-16 h-16 bg-[#f0ebe2] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Wrench className="h-7 w-7 text-[#b8aea5]" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">No assigned jobs</h3>
-              <p className="text-slate-500 text-sm">Jobs assigned to you will appear here.</p>
+              <h3 className="text-lg font-bold text-[#2d3748]">No assigned jobs</h3>
+              <p className="text-[#9a9186] text-sm">Jobs assigned to you will appear here.</p>
             </div>
           ) : (
           jobCards.map((job) => {
@@ -148,15 +148,15 @@ export default function TechnicianDashboard() {
             const statusInfo = STATUS_LABELS[job.status];
 
             return (
-              <div key={job.id} className="p-6 flex justify-between items-start hover:bg-slate-50 transition-colors group">
+              <div key={job.id} className="p-6 flex justify-between items-start hover:bg-[#f0ebe2] transition-colors group">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs">
+                    <div className="w-8 h-8 rounded-full bg-[#f0ebe2] flex items-center justify-center text-[#6b6258] text-xs">
                       {vehicle?.make[0]}{vehicle?.model[0]}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-slate-900 text-sm">{vehicle?.make} {vehicle?.model}</div>
-                      <div className="text-xs text-slate-500">{vehicle?.plateNumber}</div>
+                      <div className="font-bold text-[#2d3748] text-sm">{vehicle?.make} {vehicle?.model}</div>
+                      <div className="text-xs text-[#9a9186]">{vehicle?.plateNumber}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 text-sm mb-4">
@@ -164,7 +164,7 @@ export default function TechnicianDashboard() {
                       {statusInfo.label}
                     </ClayBadge>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-slate-600">
+                  <div className="flex items-center gap-3 text-sm text-[#6b6258]">
                     <span>{services.map(s => s.name).join(", ")}</span>
                   </div>
                 </div>
@@ -208,9 +208,9 @@ export default function TechnicianDashboard() {
         }
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+          <div className="flex items-center gap-3 p-3 bg-[#f0ebe2] rounded-lg border border-[#e2ddd0]">
             <ClipboardCheck className="h-5 w-5 text-electric-blue shrink-0" />
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#6b6258]">
               Complete each check below before sending the vehicle to QC.
             </p>
           </div>
@@ -219,11 +219,11 @@ export default function TechnicianDashboard() {
             {INSPECTION_CHECKS.map((check, index) => (
               <label
                 key={check}
-                className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors"
+                className="flex items-center gap-3 p-3 bg-[#f0ebe2] rounded-lg border border-[#e2ddd0] cursor-pointer hover:bg-[#f0ebe2] transition-colors"
               >
                 <input
                   type="checkbox"
-                  className="h-4 w-4 text-electric-blue rounded border-slate-300"
+                  className="h-4 w-4 text-electric-blue rounded border-[#e2ddd0]"
                   checked={checks[index] ?? false}
                   onChange={(e) =>
                     setChecks(prev => {
@@ -233,7 +233,7 @@ export default function TechnicianDashboard() {
                     })
                   }
                 />
-                <span className="text-sm text-slate-700">{check}</span>
+                <span className="text-sm text-[#4a433a]">{check}</span>
               </label>
             ))}
           </div>
@@ -290,8 +290,8 @@ export default function TechnicianDashboard() {
 function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <ClayCard padding="sm" className="text-center">
-      <div className={`text-slate-500 text-xs font-medium uppercase tracking-wider mb-1 ${color}`}>{label}</div>
-      <div className="text-2xl font-bold text-slate-900">{value}</div>
+      <div className={`text-[#9a9186] text-xs font-medium uppercase tracking-wider mb-1 ${color}`}>{label}</div>
+      <div className="text-2xl font-bold text-[#2d3748]">{value}</div>
     </ClayCard>
   );
 }

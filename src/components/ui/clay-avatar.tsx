@@ -35,7 +35,7 @@ export function ClayAvatar({
   return (
     <div
       className={cn(
-        "relative clay-shadow-inset rounded-full flex items-center justify-center font-bold text-slate-800 overflow-hidden border border-white/60",
+        "relative clay-shadow-inset rounded-full flex items-center justify-center font-bold text-[#4a433a] overflow-hidden border border-[#fdfbf7]/60",
         sizeStyles[size],
         className
       )}

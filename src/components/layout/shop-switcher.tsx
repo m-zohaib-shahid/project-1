@@ -49,7 +49,7 @@ export function ShopSwitcher() {
         className="flex items-center gap-2 px-3 py-2"
       >
         <Building2 className="h-4 w-4 shrink-0" />
-        <span className="font-medium text-slate-700 dark:text-slate-200 truncate max-w-[10rem]">
+        <span className="font-medium text-[#4a433a] dark:text-[#c4baa8] truncate max-w-[10rem]">
           {currentShop.name}
         </span>
         <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
@@ -73,13 +73,13 @@ export function ShopSwitcher() {
               className={`w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-xl transition-colors ${
                 shop.id === currentShop.id
                   ? "bg-electric-blue/10 text-electric-blue font-medium"
-                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-700/60"
+                  : "text-[#6b6258] dark:text-[#c4baa8] hover:bg-[#e8e2d4]/60 dark:hover:bg-[#342e28]/60"
               }`}
             >
               <Building2 className="h-4 w-4 shrink-0" />
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium truncate">{shop.name}</div>
-                <div className="text-xs text-slate-500 truncate">{shop.city}</div>
+                <div className="text-xs text-[#9a9186] truncate">{shop.city}</div>
               </div>
               {shop.id === currentShop.id && <Check className="h-4 w-4 shrink-0" />}
             </button>

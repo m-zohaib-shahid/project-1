@@ -47,7 +47,7 @@ export function ClayModal({
       aria-modal="true"
     >
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 rgba(28,25,23,0.6) backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
       <div
@@ -59,17 +59,17 @@ export function ClayModal({
         {showCloseButton && (
           <button
             onClick={onClose}
-            className="absolute right-3 top-3 p-2 hover:bg-slate-200 rounded-lg transition-colors"
+            className="absolute right-3 top-3 p-2 hover:bg-[#e8e2d4] rounded-lg transition-colors"
             aria-label="Close"
           >
-            <X className="h-5 w-5 text-slate-600" />
+            <X className="h-5 w-5 text-[#6b6258]" />
           </button>
         )}
         {title && (
           <div className="px-6 py-4">
-            <h2 className="text-xl font-bold text-slate-900">{title}</h2>
+            <h2 className="text-xl font-bold text-[#2d3748]">{title}</h2>
             {description && (
-              <p className="text-slate-500 text-sm mt-1">{description}</p>
+              <p className="text-[#9a9186] text-sm mt-1">{description}</p>
             )}
           </div>
         )}
@@ -118,7 +118,7 @@ export function ClayDrawer({
   return (
     <div className="fixed inset-0 z-50 flex items-center" role="dialog" aria-modal="true">
       <div
-        className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 rgba(28,25,23,0.5) backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
       <div
@@ -132,16 +132,16 @@ export function ClayDrawer({
           placement === "left" ? "left-0" : "right-0"
         )}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#e2ddd0]">
           {title && (
-            <h2 className="text-xl font-bold text-slate-900">{title}</h2>
+            <h2 className="text-xl font-bold text-[#2d3748]">{title}</h2>
           )}
           <button
             onClick={onClose}
-            className="p-2 hover:bg-slate-200 rounded-lg transition-colors"
+            className="p-2 hover:bg-[#e8e2d4] rounded-lg transition-colors"
             aria-label="Close"
           >
-            <X className="h-5 w-5 text-slate-600" />
+            <X className="h-5 w-5 text-[#6b6258]" />
           </button>
         </div>
         <div className="p-6 overflow-y-auto max-h-[85vh]">{children}</div>

@@ -57,8 +57,8 @@ export default function SADashboard() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Service Advisor Dashboard</h1>
-          <p className="text-slate-500">Manage bookings, estimates, and technician assignments</p>
+          <h1 className="text-2xl font-bold text-[#2d3748]">Service Advisor Dashboard</h1>
+          <p className="text-[#9a9186]">Manage bookings, estimates, and technician assignments</p>
         </div>
         <div className="mt-4 md:mt-0 flex gap-2">
           <ClayButton variant="primary" size="sm" className="px-4 py-2" onClick={() => setAssignOpen(true)}>
@@ -88,10 +88,10 @@ export default function SADashboard() {
       </div>
 
       <div className="clay-card overflow-hidden">
-        <div className="p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="p-6 border-b border-[#e2ddd0] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-slate-500" />
-            <span className="text-sm font-medium text-slate-700">Filter by Status</span>
+            <Filter className="h-4 w-4 text-[#9a9186]" />
+            <span className="text-sm font-medium text-[#4a433a]">Filter by Status</span>
           </div>
           <div className="flex gap-1 flex-wrap">
             {statuses.map((s) => (
@@ -101,8 +101,8 @@ export default function SADashboard() {
                 onClick={() => setStatusFilter(s.key)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   statusFilter === s.key
-                    ? "bg-electric-blue text-white shadow-sm"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-electric-blue text-[#fdfbf7] shadow-sm"
+                    : "bg-[#f0ebe2] text-[#6b6258] hover:bg-[#f0ebe2]"
                 }`}
               >
                 {s.label} ({s.count})
@@ -113,11 +113,11 @@ export default function SADashboard() {
 
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Filter className="h-6 w-6 text-slate-400" />
+            <div className="w-16 h-16 bg-[#f0ebe2] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Filter className="h-6 w-6 text-[#b8aea5]" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900">No bookings here</h3>
-            <p className="text-slate-500 text-sm">
+            <h3 className="text-lg font-bold text-[#2d3748]">No bookings here</h3>
+            <p className="text-[#9a9186] text-sm">
               No bookings match the &ldquo;{statuses.find(s => s.key === statusFilter)?.label}&rdquo; filter.
             </p>
             <ClayButton variant="ghost" size="sm" onClick={() => setStatusFilter("all")} className="mt-4 px-4 py-2">
@@ -135,7 +135,7 @@ export default function SADashboard() {
 
       <ClayModal isOpen={assignOpen} onClose={closeAssignModal} title="Assign Technician">
         <div className="space-y-4">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-[#6b6258]">
             Choose a booking and the technician who will handle the work.
           </p>
           <ClaySelect
@@ -201,8 +201,8 @@ export default function SADashboard() {
 function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <ClayCard padding="sm" className="text-center">
-      <div className={`text-slate-500 text-xs font-medium uppercase tracking-wider mb-1 ${color}`}>{label}</div>
-      <div className="text-2xl font-bold text-slate-900">{value}</div>
+      <div className={`text-[#9a9186] text-xs font-medium uppercase tracking-wider mb-1 ${color}`}>{label}</div>
+      <div className="text-2xl font-bold text-[#2d3748]">{value}</div>
     </ClayCard>
   );
 }
@@ -217,7 +217,7 @@ function BookingList({
   onView: (booking: Booking) => void;
 }) {
   return (
-    <div className="divide-y divide-slate-200">
+    <div className="divide-y divide-[#e2ddd0]">
       {bookings.map((booking) => {
         const vehicle = getVehicleById(booking.vehicleId);
         const services = getServicesByIds(booking.serviceIds);
@@ -225,36 +225,36 @@ function BookingList({
         const technician = technicianId ? STAFF.find((s) => s.id === technicianId) : undefined;
 
         return (
-          <div key={booking.id} className="p-6 flex flex-col sm:flex-row justify-between sm:items-start gap-4 hover:bg-slate-50 transition-colors group">
+          <div key={booking.id} className="p-6 flex flex-col sm:flex-row justify-between sm:items-start gap-4 hover:bg-[#f0ebe2] transition-colors group">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 mb-2">
                 <div className="text-right">
-                  <div className="text-xs font-medium text-slate-500">#{booking.id.slice(-3)}</div>
+                  <div className="text-xs font-medium text-[#9a9186]">#{booking.id.slice(-3)}</div>
                 </div>
                 {vehicle && (
-                  <div className="text-sm font-semibold text-slate-900">
+                  <div className="text-sm font-semibold text-[#2d3748]">
                     {vehicle.make} {vehicle.model}
                   </div>
                 )}
               </div>
               <div className="flex items-center gap-4 text-sm mb-4 flex-wrap">
-                <span className="text-slate-600">{booking.scheduledAt.split("T")[0]}</span>
+                <span className="text-[#6b6258]">{booking.scheduledAt.split("T")[0]}</span>
                 <ClayBadge variant={bookingStatusVariant(booking.status)} className="text-xs">
                   {STATUS_LABELS[booking.status].label}
                 </ClayBadge>
                 {technician && (
-                  <span className="text-xs text-slate-500">Technician: {technician.name}</span>
+                  <span className="text-xs text-[#9a9186]">Technician: {technician.name}</span>
                 )}
               </div>
-              <div className="flex items-center gap-3 text-sm text-slate-600 mb-4 flex-wrap">
+              <div className="flex items-center gap-3 text-sm text-[#6b6258] mb-4 flex-wrap">
                 {services.length > 0 ? (
                   services.map((s) => (
-                    <span key={s.id} className="px-2 py-1 rounded-lg bg-slate-100 text-xs text-slate-600">
+                    <span key={s.id} className="px-2 py-1 rounded-lg bg-[#f0ebe2] text-xs text-[#6b6258]">
                       {s.name}
                     </span>
                   ))
                 ) : (
-                  <span className="text-xs text-slate-400">No services listed</span>
+                  <span className="text-xs text-[#b8aea5]">No services listed</span>
                 )}
               </div>
             </div>
@@ -262,7 +262,7 @@ function BookingList({
               <ClayButton
                 variant="ghost"
                 size="sm"
-                className="px-3 py-2 text-slate-500"
+                className="px-3 py-2 text-[#9a9186]"
                 onClick={() => onView(booking)}
                 aria-label={`View booking ${booking.id}`}
               >
@@ -284,10 +284,10 @@ function BookingDetail({ booking, technicianName }: { booking: Booking; technici
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <div className="font-bold text-slate-900">
+          <div className="font-bold text-[#2d3748]">
             {vehicle ? `${vehicle.make} ${vehicle.model}` : "Vehicle"}
           </div>
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-[#9a9186]">
             {vehicle ? vehicle.plateNumber : booking.vehicleId}
           </div>
         </div>
@@ -297,32 +297,32 @@ function BookingDetail({ booking, technicianName }: { booking: Booking; technici
       </div>
 
       <dl className="space-y-2">
-        <div className="flex justify-between gap-4 p-3 rounded-xl bg-slate-50">
-          <dt className="text-sm text-slate-500">Scheduled</dt>
-          <dd className="text-sm font-medium text-slate-900">{booking.scheduledAt.split("T")[0]}</dd>
+        <div className="flex justify-between gap-4 p-3 rounded-xl bg-[#f0ebe2]">
+          <dt className="text-sm text-[#9a9186]">Scheduled</dt>
+          <dd className="text-sm font-medium text-[#2d3748]">{booking.scheduledAt.split("T")[0]}</dd>
         </div>
-        <div className="flex justify-between gap-4 p-3 rounded-xl bg-slate-50">
-          <dt className="text-sm text-slate-500">Technician</dt>
-          <dd className="text-sm font-medium text-slate-900">{technicianName ?? "Not assigned"}</dd>
+        <div className="flex justify-between gap-4 p-3 rounded-xl bg-[#f0ebe2]">
+          <dt className="text-sm text-[#9a9186]">Technician</dt>
+          <dd className="text-sm font-medium text-[#2d3748]">{technicianName ?? "Not assigned"}</dd>
         </div>
-        <div className="flex justify-between gap-4 p-3 rounded-xl bg-slate-50">
-          <dt className="text-sm text-slate-500">Total</dt>
-          <dd className="text-sm font-medium text-slate-900">
+        <div className="flex justify-between gap-4 p-3 rounded-xl bg-[#f0ebe2]">
+          <dt className="text-sm text-[#9a9186]">Total</dt>
+          <dd className="text-sm font-medium text-[#2d3748]">
             {booking.totalAmount ? formatCurrency(booking.totalAmount) : "—"}
           </dd>
         </div>
       </dl>
 
       <div>
-        <div className="text-sm font-semibold text-slate-900 mb-2">Services</div>
+        <div className="text-sm font-semibold text-[#2d3748] mb-2">Services</div>
         {services.length === 0 ? (
-          <p className="text-sm text-slate-500">No services on this booking.</p>
+          <p className="text-sm text-[#9a9186]">No services on this booking.</p>
         ) : (
           <ul className="space-y-1">
             {services.map((s) => (
-              <li key={s.id} className="text-sm text-slate-600 flex justify-between gap-4">
+              <li key={s.id} className="text-sm text-[#6b6258] flex justify-between gap-4">
                 <span>{s.name}</span>
-                <span className="text-slate-500">{formatCurrency(s.basePrice)}</span>
+                <span className="text-[#9a9186]">{formatCurrency(s.basePrice)}</span>
               </li>
             ))}
           </ul>
